@@ -1,3 +1,44 @@
+<?php 
+
+include "connection/connection.php";
+
+if(!isset($_SESSION['username']))
+{    
+    echo '<script language="javascript">';
+    echo 'location.href="login.php"';
+    echo '</script>';       
+    exit();
+}
+else if(isset($_SESSION['username']))
+{    
+    if(isset($_SESSION['user_role']))
+    {
+        if($_SESSION['user_role'] != "user")
+        {
+            echo '<script language="javascript">';
+            echo 'location.href="login.php"';
+            echo '</script>';
+            exit();
+        }
+    }
+    else if(!isset($_SESSION['user_role']))
+    {        
+        echo '<script language="javascript">';
+        echo 'location.href="login.php"';
+        echo '</script>';
+        exit();        
+    }
+}
+
+// $adminID = $_SESSION['user_id'];
+
+// $query = "SELECT * FROM user  WHERE user_id = '$adminID'";
+
+// $result = mysqli_query($conn,$query);
+// $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+
+?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +48,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="src/assets/images/favicon.png">
-    <title>ESAS Billing</title>
+    <title>ESAS Cloud</title>
     <!-- Datatable Plugin Css -->
     <link href="src/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">    
     <!-- Custom CSS -->
@@ -16,6 +57,7 @@
     <link href="src/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link href="src/dist/css/style.min.css" rel="stylesheet">
+    <link href="src/dist/css/custom.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -56,15 +98,15 @@
                         <a href="index.php">
                             <b class="logo-icon">
                                 <!-- Dark Logo icon -->
-                                <img src="src/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                                <img src="src/assets/images/esas_logo.png" alt="homepage" class="dark-logo esas-logo-header" />
                                 <!-- Light Logo icon -->
-                                <img src="src/assets/images/logo-icon.png" alt="homepage" class="light-logo" />
+                                <img src="src/assets/images/esas_icon.png" alt="homepage" class="light-logo esas-logo-header" />
                             </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
                             <span class="logo-text">
                                 <!-- dark Logo text -->
-                                <h3 class="dark-logo">ESAS Billing</h3>
+                                <h3 class="dark-logo">ESAS Cloud</h3>
                                 <!-- Light Logo text -->
                                 <img src="src/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
                             </span>
@@ -111,7 +153,7 @@
                                         class="svg-icon mr-2 ml-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i data-feather="power"
+                                <a class="dropdown-item" href="authentication/logout.php"><i data-feather="power"
                                         class="svg-icon mr-2 ml-1"></i>
                                     Logout</a>
                             </div>
@@ -141,16 +183,28 @@
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Report</span></li>
 
-                        <li class="sidebar-item"> <a class="sidebar-link" href="ticket-list.html"
+                        <li class="sidebar-item"> <a class="sidebar-link" href="report-list.php"
                                 aria-expanded="false"><i data-feather="tag" class="feather-icon"></i><span
-                                    class="hide-menu">Report List
+                                    class="hide-menu">User List
+                                </span></a>
+                        </li>
+
+                        <li class="sidebar-item"> <a class="sidebar-link" href="storage-user.php"
+                                aria-expanded="false"><i class="icon-grid"></i><span
+                                    class="hide-menu">User Management
+                                </span></a>
+                        </li>                        
+
+                        <li class="sidebar-item"> <a class="sidebar-link" href="system.php"
+                                aria-expanded="false"><i class="icon-settings"></i><span
+                                    class="hide-menu">System Management
                                 </span></a>
                         </li>
 
                         <li class="list-divider"></li>
 
                         <li class="nav-small-cap"><span class="hide-menu">System</span></li>
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="authentication-login1.html"
+                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="authentication/logout.php"
                                 aria-expanded="false"><i data-feather="log-out" class="feather-icon"></i><span
                                     class="hide-menu">Logout</span></a></li>
                     </ul>

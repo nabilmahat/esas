@@ -1,0 +1,15 @@
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.esas-logo {
+    height: 90px;
+    width: auto;
+}
+
+.esas-logo-header {
+    height: 90px;
+    width: auto;
+    margin-top: 25px;
+}

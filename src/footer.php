@@ -33,8 +33,8 @@
 <!-- This Page JS -->
 <!-- Chart JS -->
 <!-- <script src="src/dist/js/pages/chartjs/chartjs.init.js"></script> -->
-    <script src="src/dist/js/pages/chartjs/department-summary.init.js"></script> // custom chart
-<script src="src/dist/js/pages/chartjs/workfolder-summary.init.js"></script> // custom chart
+    <script src="src/dist/js/pages/chartjs/department-summary.init.js"></script> 
+<script src="src/dist/js/pages/chartjs/workfolder-summary.init.js"></script>
 <script src="src/assets/libs/chart.js/dist/Chart.min.js"></script>
 
 <!--Datatable plugins -->

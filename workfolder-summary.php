@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
+
 <?php 
 include "src/header.php"
 ?>
@@ -14,12 +15,14 @@ include "src/header.php"
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-7 align-self-center">
-                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Usage Report</h4>
+                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">ESAS Workfolder Summary</h4>
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="index.php" class="text-muted">Home</a></li>
-                            <li class="breadcrumb-item text-muted active" aria-current="page">Usage Report</li>
+                            <li class="breadcrumb-item"><a href="report-list.php" class="text-muted">Report List</a>
+                            </li>
+                            <li class="breadcrumb-item text-muted active" aria-current="page">ESAS Workfolder Summary
+                            </li>
                         </ol>
                     </nav>
                 </div>
@@ -35,6 +38,15 @@ include "src/header.php"
                         <option value="2">Apr 22</option>
                         <option value="2" selected>May 22</option>
                     </select>
+                </div>
+            </div>
+            <br>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12 align-right">
+                <div class="customize-input float-right">
+                    <button id="btnPrint" class="btn btn-dark">Print to PDF</button>
                 </div>
             </div>
         </div>
@@ -53,7 +65,7 @@ include "src/header.php"
             <!-- column -->
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" id="chart">
                         <h4 class="card-title">MEDIA PRIMA ESAS MAY 1-31, 2022</h4>
                         <div>
                             <canvas id="bar-chart-horizontal" height="150"> </canvas>
@@ -174,5 +186,20 @@ include "src/header.php"
 include "src/footer.php";
 ?>
 </body>
+
+
+
+<script type="text/javascript">
+$("#btnPrint").click(function() {
+    var divContents = $("#text").html();
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>Html to PDF</title>');
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(document.getElementById("bar-chart-horizontal").innerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
+</script>
 
 </html>

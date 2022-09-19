@@ -24,19 +24,6 @@ include "src/header.php"
                     </nav>
                 </div>
             </div>
-            <div class="col-5 align-self-center">
-                <div class="customize-input float-right">
-                    <select
-                        class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
-                        <option value="dec21">Dec 21</option>
-                        <option value="1">Jan 22</option>
-                        <option value="2">Feb 22</option>
-                        <option value="2">Mar 22</option>
-                        <option value="2">Apr 22</option>
-                        <option value="2" selected>May 22</option>
-                    </select>
-                </div>
-            </div>
         </div>
     </div>
     <!-- ============================================================== -->

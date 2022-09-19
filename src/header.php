@@ -47,7 +47,7 @@ else if(isset($_SESSION['username']))
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="src/assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="src/assets/images/esas_icon.png">
     <title>ESAS Cloud</title>
     <!-- Datatable Plugin Css -->
     <link href="src/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">    
@@ -104,12 +104,12 @@ else if(isset($_SESSION['username']))
                             </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
-                            <span class="logo-text">
+                            <!-- <span class="logo-text"> -->
                                 <!-- dark Logo text -->
-                                <h3 class="dark-logo">ESAS Cloud</h3>
+                                <!-- <h3 class="dark-logo">ESAS Cloud</h3> -->
                                 <!-- Light Logo text -->
-                                <img src="src/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
-                            </span>
+                                <!-- <img src="src/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
+                            <!-- </span> -->
                         </a>
                     </div>
                     <!-- ============================================================== -->

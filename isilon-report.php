@@ -3,7 +3,11 @@
 
 
 <?php 
-include "src/header.php"
+include "src/header.php";
+
+$dateParam = $_GET['report_date'];
+echo $dateParam;
+
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -19,7 +23,8 @@ include "src/header.php"
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="report-list.php" class="text-muted">Report List</a></li>
+                            <li class="breadcrumb-item"><a href="report-list.php" class="text-muted">Report List</a>
+                            </li>
                             <li class="breadcrumb-item text-muted active" aria-current="page">ESAS Isilon Report</li>
                         </ol>
                     </nav>
@@ -27,15 +32,14 @@ include "src/header.php"
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
-                    <select
-                        class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
-                        <option value="dec21">Dec 21</option>
-                        <option value="1">Jan 22</option>
-                        <option value="2">Feb 22</option>
-                        <option value="2">Mar 22</option>
-                        <option value="2">Apr 22</option>
-                        <option value="2" selected>May 22</option>
-                    </select>
+                    <form class="mt-4">
+                        <div class="form-group">
+                            Select report month:
+                            <?php
+                            echo "<input type='month' id='report-date' onchange='selectDate()' class='form-control' value='".$dateParam."'>"
+                            ?>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -180,6 +184,9 @@ include "src/footer.php";
 ?>
 </body>
 
+<!-- script for report -->
+<script src="src/dist/js/report.js"></script>
+
 <!-- SignIn modal content -->
 <div id="login-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -188,10 +195,12 @@ include "src/footer.php";
                 <div class="text-center mt-2 mb-4">
                     <h4 class="card-title">Upload report file</h4>
                 </div>
-                <form action="#" class="pl-3 pr-3">
+                <form action="module/csv.php" id="csvForm" method="POST" enctype="multipart/form-data"
+                    class="pl-3 pr-3">
                     <div class="form-group">
                         <fieldset class="form-group">
-                            <input type="file" class="form-control-file" id="exampleInputFile">
+                            <input type="file" class="form-control-file" id="exampleInputFile" accept=".csv"
+                                name="file_name">
                         </fieldset>
                     </div>
                     <div class="form-group text-center">

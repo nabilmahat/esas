@@ -3,7 +3,16 @@
 
 
 <?php 
-include "src/header.php"
+include "src/header.php";
+
+date_default_timezone_set('Asia/Kuala_Lumpur');
+
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+$listCustomer = "SELECT customer.*, MAX(report.usage_size) as total_size FROM customer INNER JOIN department ON customer.cust_id = department.cust_id INNER JOIN folder ON department.dept_id = folder.dept_id INNER JOIN report ON folder.folder_id = report.folder_id WHERE report.month = '".$currentMonth."'";
+$execListCustomer = mysqli_query($conn, $listCustomer);
+
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -47,49 +56,39 @@ include "src/header.php"
                                     <tr>
                                         <th>No</th>
                                         <th>Customer</th>
-                                        <th>Total Usage Size (GB)</th>
+                                        <th>Current Total Usage Size (GB)</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Media Prima</td>
-                                        <td><b>1,363,974</b></td>
-                                        <td class="text-center">
-                                            <a href="isilon-report.php" class="btn btn-sm btn-primary btn-rounded">
-                                                Isilon
-                                            </a>
-                                            <a href="workfolder-summary.php" class="btn btn-sm btn-success btn-rounded">
-                                                Workfolder
-                                            </a>
-                                            <a href="departmental-summary.php" class="btn btn-sm btn-dark btn-rounded">
-                                                Departmental
-                                            </a>
-                                            <a href="usage-breakdown.php" class="btn btn-sm btn-danger btn-rounded">
-                                                Breakdown
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Media Prima Archive</td>
-                                        <td><b>5,276,249</b></td>
-                                        <td class="text-center">
-                                            <a href="isilon-report.php" class="btn btn-sm btn-primary btn-rounded">
-                                                Isilon
-                                            </a>
-                                            <a href="workfolder-summary.php" class="btn btn-sm btn-success btn-rounded">
-                                                Workfolder
-                                            </a>
-                                            <a href="departmental-summary.php" class="btn btn-sm btn-dark btn-rounded">
-                                                Departmental
-                                            </a>
-                                            <a href="usage-breakdown.php" class="btn btn-sm btn-danger btn-rounded">
-                                                Breakdown
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    <?php
+
+                                        foreach($execListCustomer as $row)
+                                    echo "<tr>";
+                                    echo "<td>1</td>";
+                                    echo "<td>".$row['cust_name']."</td>";
+
+                                    //    calculate Bytes to GBs [size / 1073741824]
+                                    $total_size = $row['total_size']/1073741824;
+
+                                    echo "<td><b>".number_format($total_size)."</b></td>";
+                                    echo "<td class='text-center'>";
+                                    echo "<a href='isilon-report.php?cust_id=".$row['cust_id']."&report_date=".$currentYear."-".$currentMonth."' class='btn btn-sm btn-primary btn-rounded'>";
+                                    echo "Isilon";
+                                    echo "</a>";
+                                    echo "<a href='workfolder-summary.php?cust_id=".$row['cust_id']."&report_date=".$currentYear."-".$currentMonth."' class='btn btn-sm btn-success btn-rounded'>";
+                                    echo "Workfolder";
+                                    echo "</a>";
+                                    echo "<a href='departmental-summary.php?cust_id=".$row['cust_id']."&report_date=".$currentYear."-".$currentMonth."' class='btn btn-sm btn-dark btn-rounded'>";
+                                    echo "Departmental";
+                                    echo "</a>";
+                                    echo "<a href='usage-breakdown.php?cust_id=".$row['cust_id']."&report_date=".$currentYear."-".$currentMonth."' class='btn btn-sm btn-danger btn-rounded'>";
+                                    echo "Breakdown";
+                                    echo "</a>";
+                                    echo "</td>";
+                                    echo "</tr>";                                    
+
+                                    ?>
                                 </tbody>
                             </table>
                         </div>

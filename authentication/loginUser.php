@@ -6,9 +6,6 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 $date = date("Y-m-d H:i:s");
 $dateString = date("YmdHis");
 
-//sign up patient
-
-
 $id = mysqli_escape_string($conn,$_POST['username']);
 $password = mysqli_escape_string($conn,$_POST['password']);
 
@@ -25,7 +22,7 @@ if($count==1){
     $user_role = $row['user_role'];
 
 	// set username session
-	$_SESSION['username'] = $username;	
+	$_SESSION['username'] = $username;
 
   	if($user_role=='user'){
     	

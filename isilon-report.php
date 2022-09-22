@@ -5,8 +5,11 @@
 <?php 
 include "src/header.php";
 
+$custParam = $_GET['cust_id'];
 $dateParam = $_GET['report_date'];
-echo $dateParam;
+
+// split date by '-' and assign to variable
+list($yearParam, $monthParam) = explode("-", $dateParam);
 
 ?>
 <!-- ============================================================== -->
@@ -77,81 +80,43 @@ echo $dateParam;
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php
+
+                                    $listDirectory = "SELECT *
+                                                        FROM report 
+                                                        INNER JOIN folder ON report.folder_id = folder.folder_id 
+                                                        INNER JOIN department ON department.dept_id = folder.dept_id 
+                                                        INNER JOIN customer ON customer.cust_id = department.cust_id 
+                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND customer.cust_id = '".$custParam."' ";
+                                    $execListDirectory = mysqli_query($conn, $listDirectory);
+
+                                    $total_usage = 0;
+
+                                    foreach ($execListDirectory as $row) {
+                                        echo "<tr>";
+                                        echo "<td>1</td>";
+                                        echo "<td>".$row['cust_name']. " ".$row['dept_name']."</td>";
+                                        echo "<td>".$row['folder_name']."</td>";
+
+                                        //    calculate Bytes to GBs [size / 1073741824]
+                                        $total_size = $row['usage_size']/1073741824;
+                                        $total_usage = $total_usage + $row['usage_size'];
+
+                                        echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                        echo "</tr>";
+                                    }
+
+                                    ?>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Media Prima Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Media Prima Archive</td>
-                                        <td>ESAS ARCHIVE - Dalet DPSHARE RSU</td>
-                                        <td class="text-right">5,276,249</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Media Prima News </td>
-                                        <td>ESAS ARCHIVE - NRCS</td>
-                                        <td class="text-right">448,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Media Prima Engineering</td>
-                                        <td>ESAS ARCHIVE -IMS</td>
-                                        <td class="text-right">31,614</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>12</td>
-                                        <td>Production</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-center">Total</td>
-                                        <td class="text-right">9,161,846</td>
+                                        <td colspan="3" class="text-center"><b>Total</b></td>
+                                        <td class="text-right">
+                                            <b>
+                                            <?php 
+                                                $totalGB = $total_usage/1073741824;
+                                                echo number_format($totalGB);
+                                            ?>
+                                            </b>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -78,7 +78,7 @@ if($fileName) {
         }
 
         echo "<script>";
-        echo "location.href = '../isilon-report.php';";
+        echo "location.href = '../isilon-report.php?cust_id=&report_date=';";
         // echo "alert(". count($detail) .");";
         echo "</script>";
     }

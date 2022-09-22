@@ -10,7 +10,7 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 $currentMonth = date('m');
 $currentYear = date('Y');
 
-$listCustomer = "SELECT customer.*, MAX(report.usage_size) as total_size FROM customer INNER JOIN department ON customer.cust_id = department.cust_id INNER JOIN folder ON department.dept_id = folder.dept_id INNER JOIN report ON folder.folder_id = report.folder_id WHERE report.month = '".$currentMonth."'";
+$listCustomer = "SELECT customer.*, MAX(report.usage_size) as total_size FROM customer INNER JOIN department ON customer.cust_id = department.cust_id INNER JOIN folder ON department.dept_id = folder.dept_id INNER JOIN report ON folder.folder_id = report.folder_id WHERE report.month = '".$currentMonth."' AND report.year = '".$currentYear."'";
 $execListCustomer = mysqli_query($conn, $listCustomer);
 
 ?>

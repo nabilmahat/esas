@@ -185,13 +185,13 @@ else if(isset($_SESSION['username']))
 
                         <li class="sidebar-item"> <a class="sidebar-link" href="report-list.php"
                                 aria-expanded="false"><i data-feather="tag" class="feather-icon"></i><span
-                                    class="hide-menu">User List
+                                    class="hide-menu">Customer List
                                 </span></a>
                         </li>
 
                         <li class="sidebar-item"> <a class="sidebar-link" href="storage-user.php"
                                 aria-expanded="false"><i class="icon-grid"></i><span
-                                    class="hide-menu">User Management
+                                    class="hide-menu">Customer Management
                                 </span></a>
                         </li>                        
 

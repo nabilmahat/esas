@@ -3,7 +3,26 @@
 
 
 <?php 
-include "src/header.php"
+include "src/header.php";
+
+$custParam = $_GET['cust_id'];
+
+if(isset($custParam)) {
+    if($custParam != '') {
+    $listDepartment = "SELECT * FROM customer 
+                        INNER JOIN department ON customer.cust_id = department.cust_id
+                        WHERE customer.cust_id='".$custParam."'";
+    $execListDepartment = mysqli_query($conn, $listDepartment); 
+    } else {
+        echo "<script>";
+        echo "location.href = 'storage-user.php';";
+        echo "</script>";
+    }
+} else {
+    echo "<script>";
+    echo "location.href = 'storage-user.php';";
+    echo "</script>";
+}
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -26,6 +45,13 @@ include "src/header.php"
                     </nav>
                 </div>
             </div>
+            <div class="col-5 align-self-center">
+                <div class="col-12 align-right">
+                    <div class="customize-input float-right" data-toggle="modal" data-target="#add-department-modal">
+                        <button id="btnPrint" class="btn btn-dark">Add Department</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- ============================================================== -->
@@ -40,253 +66,75 @@ include "src/header.php"
         <!-- ============================================================== -->
         <div class="row">
             <!-- Start Production Table -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="customize-input row">
-                            <div class="col-md-10">
-                                <h4 class="card-title">Production</h4>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <button type="button" class="btn btn-sm btn-success btn-rounded" data-toggle="modal"
-                                    data-target="#directory-modal">
-                                    <i class="fas fa-plus"></i> Directory
-                                </button>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="table-responsive">
-                            <table id="zero_config1" class="table table-striped table-bordered no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Directory</th>
-                                        <th>Folder Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>/ifs/MXFSERVER</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>/ifs/PWD_Clean_Version</td>
-                                        <td>PWD_Clean_Version</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php
+                $deptNum = 1;
+                foreach ($execListDepartment as $row) {
+                    echo "<div class='col-12'>";
+                    echo "<div class='card'>";
+                    echo "<div class='card-body'>";
+                    echo "<div class='customize-input row'>";
+                    echo "<div class='col-md-10'>";
+                    echo "<h4 class='card-title'>".$row["dept_name"]."</h4>";
+                    echo "</div>";
+                    echo "<div class='col-md-2 text-right'>";
+                    echo "<button type='button' class='btn btn-sm btn-success btn-rounded' data-toggle='modal'";
+                    echo "data-target='#directory-modal'>";
+                    echo "<i class='fas fa-plus'></i> Directory";
+                    echo "</button>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "<br>";
+                    echo "<div class='table-responsive'>";
+                    echo "<table id='zero_config".$deptNum."' class='table table-striped table-bordered no-wrap'>";
+                    echo "<thead>";
+                    echo "<tr>";
+                    echo "<th>No</th>";
+                    echo "<th>Directory</th>";
+                    echo "<th>Folder Name</th>";
+                    echo "<th>Action</th>";
+                    echo "</tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
+
+                    $listDirectory = "SELECT * FROM folder 
+                                        INNER JOIN department ON folder.dept_id = department.dept_id
+                                        INNER JOIN customer ON department.cust_id = customer.cust_id
+                                        WHERE customer.cust_id='$custParam' AND department.dept_id = '".$row['dept_id']."'";
+                    $execListDirectory = mysqli_query($conn, $listDirectory);
+
+                    $dirNum = 1;
+
+                    foreach ($execListDirectory as $rowDir) {
+                        echo "<tr>";
+                        echo "<td>".$dirNum."</td>";
+                        echo "<td>".$rowDir["folder_directory"]."</td>";
+                        echo "<td>".$rowDir["folder_name"]."</td>";
+                        echo "<td>";
+                        echo "<button type='button' class='btn btn-sm btn-info btn-rounded'";
+                        echo "data-toggle='modal' data-target='#edit-modal'>";
+                        echo "<i class='fas fa-pencil-alt'></i> Edit";
+                        echo "</button>";
+                        echo "&nbsp;&nbsp;";
+                        echo "<button type='button' class='btn btn-sm btn-danger btn-rounded'>";
+                        echo "<i class='fas fa-trash'></i> Delete";
+                        echo "</button>";
+                        echo "</td>";
+                        echo "</tr>";
+
+                        $dirNum++;
+                    }
+
+                    $deptNum++;
+    
+                    echo "</tbody>";
+                    echo "</table>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }
+            ?>
             <!-- End Production Table -->
-            <!-- Start Engineering Table -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="customize-input row">
-                            <div class="col-md-10">
-                                <h4 class="card-title">Engineering</h4>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <button type="button" class="btn btn-sm btn-success btn-rounded" data-toggle="modal"
-                                    data-target="#directory-modal">
-                                    <i class="fas fa-plus"></i> Directory
-                                </button>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="table-responsive">
-                            <table id="zero_config2" class="table table-striped table-bordered no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Directory</th>
-                                        <th>Folder Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>/ifs/AsperaData</td>
-                                        <td>ESAS Aspera</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>/ifs/IMS</td>
-                                        <td>ESAS ARCHIVE -IMS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Engineering Table -->
-            <!-- Start Archive Table -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="customize-input row">
-                            <div class="col-md-10">
-                                <h4 class="card-title">Archive</h4>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <button type="button" class="btn btn-sm btn-success btn-rounded" data-toggle="modal"
-                                    data-target="#directory-modal">
-                                    <i class="fas fa-plus"></i> Directory
-                                </button>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="table-responsive">
-                            <table id="zero_config3" class="table table-striped table-bordered no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Directory</th>
-                                        <th>Folder Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>/ifs/Dalet/DPSHARE/RSU</td>
-                                        <td>ESAS ARCHIVE - Dalet DPSHARE/RSU</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>/ifs/Dalet/DPSHARE/LSU</td>
-                                        <td>ESAS ARCHIVE - Dalet DPSHARE/LSU</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>/ifs/Dalet/DPSHARE/ESU</td>
-                                        <td>ESAS ARCHIVE - Dalet DPSHARE/ESU</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Archive Table -->
-            <!-- Start News Table -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="customize-input row">
-                            <div class="col-md-10">
-                                <h4 class="card-title">News</h4>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <button type="button" class="btn btn-sm btn-success btn-rounded" data-toggle="modal"
-                                    data-target="#directory-modal">
-                                    <i class="fas fa-plus"></i> Directory
-                                </button>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="table-responsive">
-                            <table id="zero_config4" class="table table-striped table-bordered no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Directory</th>
-                                        <th>Folder Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>/ifs/NRCS</td>
-                                        <td>ESAS ARCHIVE - NRCS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-info btn-rounded"
-                                                data-toggle="modal" data-target="#edit-modal">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger btn-rounded">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End News Table -->
         </div>
         <!-- ============================================================== -->
         <!-- End PAge Content -->
@@ -310,6 +158,37 @@ include "src/header.php"
 include "src/footer.php";
 ?>
 </body>
+
+<!-- Add Department modal content -->
+<div id="add-department-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    <h4 class="card-title">Add Department</h4>
+                </div>
+                <form action="#" class="pl-3 pr-3">
+                    <div class="form-group">
+                        <label for="">Department Name</label>
+                        <input type="text" class="form-control" placeholder="Production" id="dept_name" name="dept_name" required="" maxlength="255">
+                        <div class="invalid-feedback" id="dept-name-error" style="display: none">
+                            Department Name is required!
+                        </div>
+                        <div class="invalid-feedback" id="dept-name-error-exist" style="display: none">
+                            Department Name already exist, please insert another Department Name.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-danger" type="button" data-dismiss="modal"
+                            id="cancelAdd">Cancel</button>
+                        <button class="btn btn-rounded btn-success" type="button" id="addDepartment">Add
+                            Department</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- Add Directory modal content -->
 <div id="directory-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -343,7 +222,7 @@ include "src/footer.php";
         <div class="modal-content">
             <div class="modal-body">
                 <div class="text-center mt-2 mb-4">
-                    <h4 class="card-title">Add directory</h4>
+                    <h4 class="card-title">Edit directory</h4>
                 </div>
                 <form action="#" class="pl-3 pr-3">
                     <div class="form-group">
@@ -364,5 +243,7 @@ include "src/footer.php";
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script src="src/dist/js/ajaxForm/addDepartment.js"></script>
 
 </html>

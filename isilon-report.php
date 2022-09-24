@@ -92,32 +92,45 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
 
                                     $total_usage = 0;
 
-                                    foreach ($execListDirectory as $row) {
+                                    $count = mysqli_num_rows($execListDirectory);
+
+                                    if($count!=0){
+
+                                        foreach ($execListDirectory as $row) {
+                                            echo "<tr>";
+                                            echo "<td>1</td>";
+                                            echo "<td>".$row['cust_name']. " ".$row['dept_name']."</td>";
+                                            echo "<td>".$row['folder_name']."</td>";
+
+                                            //    calculate Bytes to GBs [size / 1073741824]
+                                            $total_size = $row['usage_size']/1073741824;
+                                            $total_usage = $total_usage + $row['usage_size'];
+
+                                            echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                            echo "</tr>";
+                                        }
+                                        
+                                        $totalGB = $total_usage/1073741824;
+
                                         echo "<tr>";
-                                        echo "<td>1</td>";
-                                        echo "<td>".$row['cust_name']. " ".$row['dept_name']."</td>";
-                                        echo "<td>".$row['folder_name']."</td>";
-
-                                        //    calculate Bytes to GBs [size / 1073741824]
-                                        $total_size = $row['usage_size']/1073741824;
-                                        $total_usage = $total_usage + $row['usage_size'];
-
-                                        echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                        echo "<td colspan='3' class='text-center'><b>Total</b></td>";
+                                        echo "<td class='text-right'>";
+                                        echo "<b>";
+                                        echo number_format($totalGB);                                            
+                                        echo "</b>";
+                                        echo "</td>";
                                         echo "</tr>";
+
+                                    } else {
+
+                                        echo "<tr>";
+                                        echo "<td colspan='34' class='text-center'><b>No Data</b></td>";
+                                        echo "</tr>";
+
                                     }
 
                                     ?>
-                                    <tr>
-                                        <td colspan="3" class="text-center"><b>Total</b></td>
-                                        <td class="text-right">
-                                            <b>
-                                            <?php 
-                                                $totalGB = $total_usage/1073741824;
-                                                echo number_format($totalGB);
-                                            ?>
-                                            </b>
-                                        </td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>

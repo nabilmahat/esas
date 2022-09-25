@@ -78,7 +78,11 @@ if(isset($custParam)) {
                     echo "</div>";
                     echo "<div class='col-md-2 text-right'>";
                     echo "<button type='button' class='btn btn-sm btn-success btn-rounded' data-toggle='modal'";
-                    echo "data-target='#directory-modal'>";
+                    echo 'data-target="#directory-modal" onclick="setFolderName(';
+                    echo "'";
+                    echo $row["dept_id"];
+                    echo "'";
+                    echo ')" >';
                     echo "<i class='fas fa-plus'></i> Directory";
                     echo "</button>";
                     echo "</div>";
@@ -170,12 +174,21 @@ include "src/footer.php";
                 <form action="#" class="pl-3 pr-3">
                     <div class="form-group">
                         <label for="">Department Name</label>
-                        <input type="text" class="form-control" placeholder="Production" id="dept_name" name="dept_name" required="" maxlength="255">
+                        <input type="text" class="form-control" placeholder="Production" id="dept_name" name="dept_name"
+                            required="" maxlength="255">
                         <div class="invalid-feedback" id="dept-name-error" style="display: none">
                             Department Name is required!
                         </div>
                         <div class="invalid-feedback" id="dept-name-error-exist" style="display: none">
                             Department Name already exist, please insert another Department Name.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Department Description</label>
+                        <input type="text" class="form-control" placeholder="Description" id="dept_desc"
+                            name="dept_desc" required="" maxlength="255">
+                        <div class="invalid-feedback" id="dept-desc-error" style="display: none">
+                            Department Description is required!
                         </div>
                     </div>
                     <div class="form-group text-center">
@@ -201,14 +214,24 @@ include "src/footer.php";
                 <form action="#" class="pl-3 pr-3">
                     <div class="form-group">
                         <label for="">Directory</label>
-                        <input type="text" class="form-control" id="placeholder" placeholder="Directory">
+                        <input type="text" class="form-control" id="dir" name="dir" placeholder="/folder/dir">
+                        <div class="invalid-feedback" id="dir-error" style="display: none">
+                            Directory is required!
+                        </div>
+                        <div class="invalid-feedback" id="dir-error-exist" style="display: none">
+                            Directory is already been used, please insert new directory.
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="">Folder Name</label>
-                        <input type="text" class="form-control" id="placeholder" placeholder="Folder Name">
+                        <label for="">Directory Name</label>
+                        <input type="text" class="form-control" id="dir_name" name="dir_name" placeholder="Directory Name">
+                        <div class="invalid-feedback" id="dir-name-error" style="display: none">
+                            Directory Name Name is required!
+                        </div>
                     </div>
                     <div class="form-group text-center">
-                        <button class="btn btn-rounded btn-primary" type="submit">Add</button>
+                        <button class="btn btn-rounded btn-danger" type="button" data-dismiss="modal" id="cancelAddDir">Cancel</button>
+                        <button class="btn btn-rounded btn-success" type="button" id="addDirectory">Add Directory</button>
                     </div>
                 </form>
             </div>
@@ -245,5 +268,6 @@ include "src/footer.php";
 </div><!-- /.modal -->
 
 <script src="src/dist/js/ajaxForm/addDepartment.js"></script>
+<script src="src/dist/js/ajaxForm/addDirectory.js"></script>
 
 </html>

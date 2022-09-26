@@ -5,6 +5,9 @@
 <?php 
 include "src/header.php";
 
+$currentMonth = date('m');
+$currentYear = date('Y');
+
 $listCustomer = "SELECT * FROM customer INNER JOIN price ON customer.cust_id = price.cust_id";
 $execListCustomer = mysqli_query($conn, $listCustomer);
 ?>
@@ -73,6 +76,11 @@ $execListCustomer = mysqli_query($conn, $listCustomer);
                                         echo "<td>".$row['cust_name']."</td>";
                                         echo "<td>".$row['price']."</td>";
                                         echo "<td>";
+                                        echo "<a href='report-detail.php?cust_id=".$row['cust_id']."&report_date=".$currentYear."-".$currentMonth."' class='btn btn-sm btn-primary btn-rounded'";
+                                        echo "data-toggle='tooltip' data-placement='top' title='View Report'>";
+                                        echo "Report";
+                                        echo "</a>";
+                                        echo "&nbsp;&nbsp;";
                                         echo "<a href='storage-detail.php?cust_id=".$row['cust_id']."' class='btn btn-sm btn-success btn-rounded'";
                                         echo "data-toggle='tooltip' data-placement='top' title='View Detail'>";
                                         echo "Detail";

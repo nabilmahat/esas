@@ -77,7 +77,7 @@ $(function () {
 			legend: { display: false },
 			title: {
 				display: true,
-				text: 'Size in GB'
+				text: 'MEDIA PRIMA ESAS MAY 1-31, 2022'
 			}
 		}
 	});

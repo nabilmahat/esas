@@ -62,7 +62,7 @@ include "src/header.php"
         <!-- Start Page Content -->
         <!-- ============================================================== -->
         <div class="row">
-            <!-- column -->
+            <!-- Start Chart -->
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body" id="chart">
@@ -73,7 +73,7 @@ include "src/header.php"
                     </div>
                 </div>
             </div>
-            <!-- column -->
+            <!-- End Chart -->
             <!-- Start List Directory Table -->
             <div class="col-12">
                 <div class="card">

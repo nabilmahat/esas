@@ -58,6 +58,7 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                             <button type="button" class="btn btn-primary border-0 custom-shadow" id="printReport">
                                 <i class="fas fa-print"></i> Print Report
                             </button>
+                            &nbsp;
                             <button type="button" class="btn btn-success border-0 custom-shadow" data-toggle="modal"
                                 data-target="#login-modal">
                                 <i class="fas fa-plus"></i> Upload Report
@@ -269,7 +270,7 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                         <br><br>      
                         <!-- Start Department Table -->
                         <div class="table-responsive">
-                            <table id="" class="table table-striped table-bordered no-wrap">
+                            <table id="departmental" class="table table-striped table-bordered no-wrap">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -316,7 +317,7 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                     <div class="card-body">
                         <h4 class="card-title">2.3 Production Business Unit Breakdown Summary</h4>
                         <div class="table-responsive">
-                            <table id="" class="table table-striped table-bordered no-wrap">
+                            <table id="breakdown" class="table table-striped table-bordered no-wrap">
                                 <thead>
                                     <tr>
                                         <th>No</th>

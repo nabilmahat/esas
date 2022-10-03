@@ -1,86 +1,87 @@
-$(function () {
+$(async function () {
 	"use strict";
 
-	// Horizental Bar Chart
-	new Chart(document.getElementById("bar-chart-horizontal"), {
-		type: 'horizontalBar',
-		data: {
-			labels: [
-				"ESAS MXFSERVER",
-				"ESAS Aspera",
-				"ESAS ARCHIVE - Dalet DPSHARE/RSU",
-				"ESAS ARCHIVE - Dalet DPSHARE/LSU",
-				"ESAS ARCHIVE - Dalet DPSHARE/ESU",
-				"ESAS ARCHIVE - Dalet MediaPrimaShare",
-				"ESAS ARCHIVE - Dalet Diva_Restore",
-				"ESAS ARCHIVE -Dalet Diva_Direct",
-				"ESAS ARCHIVE - NRCS",
-				"ESAS ARCHIVE -IMS",
-				"ESAS ARCHIVE -RC_Transit",
-				"ESAS ARCHIVE -AsperaData",
-				"ESAS ARCHVIE - Dalet Amberfin_WC",
-				"ESAS ARCHIVE -Diva",
-				"PWD_Clean_Version",
-				"ESAS ARCHIVE - Dalet DPSHARE EXPORTS",
-				"ESAS ARCHIVE -Tonton_DailyTransit",
-				"ESAS ARCHIVE -PE_Transit_Folder"
+	// get cust param and date
+	const currentUrl = new URL(window.location.href);
+	const custID = currentUrl.searchParams.get('cust_id');
+	const reportDate = currentUrl.searchParams.get('report_date');
 
-			],
-			datasets: [
-				{
-					label: "Size (GB)",
-					backgroundColor: [
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500",
-						"#FFA500"
-					],
-					data: [
-						1363974,
-						0,
-						5276249,
-						1205627,
-						569350,
-						59027,
-						0,
-						0,
-						448750,
-						31614,
-						691,
-						198054,
-						0,
-						0,
-						8380,
-						0,
-						0,
-						130
+	const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	var date = new Date(reportDate), y = date.getFullYear(), m = date.getMonth();
+	var lastDay = new Date(new Date(y, m + 1, 0)).getDate();
 
-					]
+	const reportDuration = (month[m]) + ' ' + '1-' + lastDay + ', ' + y;
+
+	let arrayLabel = [];
+	let arrayData = [];
+	let chartData = {};
+
+	let customer = '';
+
+	let ajaxPost = new Promise(function (resolve, reject) {
+		$.post("module/workfolderData.php",
+			{
+				cust_id: custID,
+				report_date: reportDate
+			},
+			async function (res, status) {
+				const data = JSON.parse(res);
+				if (data.length != 0) {
+					for (let d in data) {
+						arrayLabel.push(data[d].folder_name);
+						arrayData.push(data[d].usage_size / 1073741824);
+						customer = data[d].cust_name;
+					}
+					chartData = {
+						label: arrayLabel,
+						data: arrayData
+					}
+					new Chart(document.getElementById("bar-chart-horizontal"), {
+						type: 'horizontalBar',
+						data: {
+							labels: arrayLabel,
+							datasets: [
+								{
+									label: "Size (GB)",
+									backgroundColor: [
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500",
+										"#FFA500"
+									],
+									data: arrayData
+								}
+							]
+						},
+						options: {
+							legend: { display: false },
+							title: {
+								display: true,
+								text: customer + ' ESAS ' + reportDuration
+							}
+						}
+					});
+				} else {
+					document.getElementById('bar-chart-horizontal').style.display = "none";
+					document.getElementById('printReport').style.display = "none";
 				}
-			]
-		},
-		options: {
-			legend: { display: false },
-			title: {
-				display: true,
-				text: 'MEDIA PRIMA ESAS MAY 1-31, 2022'
-			}
-		}
+			});
+		resolve(chartData);
 	});
 
-	// line second
+	await ajaxPost;
 }); 

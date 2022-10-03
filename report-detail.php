@@ -11,6 +11,55 @@ $dateParam = $_GET['report_date'];
 // split date by '-' and assign to variable
 list($yearParam, $monthParam) = explode("-", $dateParam);
 
+$prevMonth = $monthParam - 1;
+
+// card data sql
+$cardData = "SELECT customer.cust_name, report.price_per_gb, department.dept_name, report.month, report.year, SUM(report.usage_size) as monthly_usage
+                FROM customer
+                LEFT OUTER JOIN price
+                ON	 customer.cust_id = price.cust_id
+                LEFT JOIN department
+                ON customer.cust_id = department.cust_id
+                LEFT JOIN folder
+                ON department.dept_id = folder.dept_id
+                LEFT JOIN report
+                ON folder.folder_id = report.folder_id
+                WHERE 
+                (CASE 
+                WHEN report.month IS NOT NULL AND report.year IS NOT NULL THEN 
+                    customer.cust_id = '".$custParam."' AND report.month = '".$monthParam."' AND report.year = '".$yearParam."' 
+                ELSE
+                    customer.cust_id = '".$custParam."'
+                END) "; 
+$execCardData = mysqli_query($conn, $cardData);
+
+$extractData = mysqli_fetch_array($execCardData,MYSQLI_ASSOC);
+
+$cardDataPrevious = "SELECT customer.cust_name, report.price_per_gb, department.dept_name, report.month, report.year, SUM(report.usage_size) as monthly_usage
+                FROM customer
+                LEFT OUTER JOIN price
+                ON	 customer.cust_id = price.cust_id
+                LEFT JOIN department
+                ON customer.cust_id = department.cust_id
+                LEFT JOIN folder
+                ON department.dept_id = folder.dept_id
+                LEFT JOIN report
+                ON folder.folder_id = report.folder_id
+                WHERE 
+                (CASE 
+                WHEN report.month IS NOT NULL AND report.year IS NOT NULL THEN 
+                    customer.cust_id = '".$custParam."' AND report.month = '0".$prevMonth."' AND report.year = '".$yearParam."' 
+                ELSE
+                    customer.cust_id = '".$custParam."'
+                END)  ";
+$execCardDataPrevious = mysqli_query($conn, $cardDataPrevious);
+
+$prevDataRow = mysqli_num_rows($execCardDataPrevious);
+
+if ($prevDataRow==1) {
+    $extractDataPrevious = mysqli_fetch_array($execCardDataPrevious,MYSQLI_ASSOC);
+}
+
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -22,7 +71,7 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-7 align-self-center">
-                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">ESAS Report</h4>
+                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">ESAS Report</h4>
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
@@ -77,6 +126,99 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
         <!-- ============================================================== -->
         <!-- Start Page Content -->
         <!-- ============================================================== -->
+        <!-- *************************************************************** -->
+        <!-- Start Stat Cards -->
+        <!-- *************************************************************** -->
+        <div class="card-group">
+            <div class="card border-right">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <div class="d-inline-flex align-items-center">
+                                <h2 class="text-dark mb-1 font-weight-medium">
+                                    <?php
+                                        echo number_format($extractData["monthly_usage"]/1073741824);
+                                    ?>
+                                </h2>
+                            </div>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Usage Size (GB)</h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card border-right">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <h2 class="text-dark mb-1 font-weight-medium">
+                                <?php
+
+                                    $diff = "-";
+                                    $percentage = "-";
+
+                                    if(isset($extractDataPrevious["monthly_usage"])) {
+                                        $diff = ($extractData["monthly_usage"]/1073741824)-($extractDataPrevious["monthly_usage"]/1073741824);
+                                        $percentage = ($diff/($extractDataPrevious["monthly_usage"]/1073741824))*100;
+                                        echo number_format($diff);
+                                    } else {
+                                        echo "-";
+                                    }
+                                ?>
+                            </h2>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Excess File Size (GB)
+                            </h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card border-right">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <div class="d-inline-flex align-items-center">
+                                <h2 class="text-dark mb-1 font-weight-medium">
+                                    <?php
+                                        echo number_format((float)$percentage, 2, '.', '');
+                                    ?>
+                                </h2>
+                            </div>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">% Excess File Size</h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex d-lg-flex d-md-block align-items-center">
+                        <div>
+                            <div class="d-inline-flex align-items-center">
+                                <h2 class="text-dark mb-1 font-weight-medium">
+                                <?php
+                                    echo $extractData["price_per_gb"];
+                                ?>
+                                </h2>
+                            </div>
+                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Price per GB (RM)</h6>
+                        </div>
+                        <div class="ml-auto mt-md-3 mt-lg-0">
+                            <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- *************************************************************** -->
+        <!-- End Stat Cards -->
+        <!-- *************************************************************** -->
         <div class="row ">
             <!-- Start Isilon Report -->
             <div class="col-12">
@@ -84,8 +226,8 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                     <div class="card-body row">
                         <h4 class="card-title">1. Isilon Report</h4>
                         <div class="table-responsive">
-                            <table id="isilon" class="table table-striped table-bordered no-wrap">
-                                <thead>
+                            <table id="isilon" class="table table-bordered no-wrap">
+                                <thead class="thead-light">
                                     <tr>
                                         <th>No</th>
                                         <th>Department</th>
@@ -108,20 +250,24 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
 
                                     $count = mysqli_num_rows($execListDirectory);
 
+                                    $listNum = 1;
+
                                     if($count!=0){
 
                                         foreach ($execListDirectory as $row) {
                                             echo "<tr>";
-                                            echo "<td>1</td>";
+                                            echo "<td>".$listNum."</td>";
                                             echo "<td>".$row['cust_name']. " ".$row['dept_name']."</td>";
-                                            echo "<td>".$row['folder_name']."</td>";
+                                            echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
                                             $total_size = $row['usage_size']/1073741824;
                                             $total_usage = $total_usage + $row['usage_size'];
-
+                                                                                
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
                                             echo "</tr>";
+
+                                            $listNum++;
                                         }
                                         
                                         $totalGB = $total_usage/1073741824;
@@ -166,8 +312,8 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                         <br>
                         <!-- Start List Directory Table -->
                         <div class="table-responsive">
-                            <table id="workfolder" class="table table-striped table-bordered no-wrap">
-                                <thead>
+                            <table id="workfolder" class="table table-bordered no-wrap">
+                                <thead class="thead-light">
                                     <tr>
                                         <th>No</th>
                                         <th>Workflow Folder</th>
@@ -175,80 +321,48 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ESAS MXFSERVER</td>
-                                        <td class="text-right">1,363,974</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-center">TOTAL</td>
-                                        <td class="text-right">9,161,846</td>
-                                    </tr>
+                                    <?php
+
+                                    $total_usage = 0;
+
+                                    $listNumWF = 1;
+
+                                    if($count!=0){
+
+                                        foreach ($execListDirectory as $row) {
+                                            echo "<tr>";
+                                            echo "<td>".$listNumWF."</td>";
+                                            echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
+
+                                            //    calculate Bytes to GBs [size / 1073741824]
+                                            $total_size = $row['usage_size']/1073741824;
+                                            $total_usage = $total_usage + $row['usage_size'];
+                                                                                
+                                            echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                            echo "</tr>";
+
+                                            $listNumWF++;
+                                        }
+                                        
+                                        $totalGB = $total_usage/1073741824;
+
+                                        echo "<tr>";
+                                        echo "<td colspan='2' class='text-center'><b>Total</b></td>";
+                                        echo "<td class='text-right'>";
+                                        echo "<b>";
+                                        echo number_format($totalGB);                                            
+                                        echo "</b>";
+                                        echo "</td>";
+                                        echo "</tr>";
+
+                                    } else {
+
+                                        echo "<tr>";
+                                        echo "<td colspan='34' class='text-center'><b>No Data</b></td>";
+                                        echo "</tr>";
+
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -270,8 +384,8 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                         <br><br>      
                         <!-- Start Department Table -->
                         <div class="table-responsive">
-                            <table id="departmental" class="table table-striped table-bordered no-wrap">
-                                <thead>
+                            <table id="departmental" class="table table-bordered no-wrap">
+                                <thead class="thead-light">
                                     <tr>
                                         <th>No</th>
                                         <th>Department</th>
@@ -279,30 +393,64 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Production</td>
-                                        <td class="text-right">1,372,354</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>News</td>
-                                        <td class="text-right">448,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Engineering</td>
-                                        <td class="text-right">229,668</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Archive</td>
-                                        <td class="text-right">7,111,074</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-center">Total</td>
-                                        <td class="text-right">9,161,846</td>
-                                    </tr>
+                                    <?php
+
+                                    $queryDepartmentList = "SELECT SUM(report.usage_size) as usage_size, department.dept_name, customer.cust_name
+                                                            FROM report
+                                                            INNER JOIN folder
+                                                            ON report.folder_id = folder.folder_id
+                                                            INNER JOIN department
+                                                            ON folder.dept_id = department.dept_id
+                                                            INNER JOIN customer
+                                                            ON department.cust_id = customer.cust_id
+                                                            WHERE report.month = '".$monthParam."' AND report.year = '".$yearParam."' AND customer.cust_id = '".$custParam."'
+                                                            GROUP BY department.dept_name";
+
+                                    $execQueryDepartmentList = mysqli_query($conn, $queryDepartmentList);
+
+                                    $totalUsageDept = 0;
+
+                                    $countDeptList = mysqli_num_rows($execQueryDepartmentList);
+
+                                    $listNumDept = 1;
+
+                                    if($countDeptList!=0){
+
+                                        foreach ($execQueryDepartmentList as $row) {
+                                            echo "<tr>";
+                                            echo "<td>".$listNumDept."</td>";
+                                            echo "<td>".$row['dept_name']."</td>";
+
+                                            //    calculate Bytes to GBs [size / 1073741824]
+                                            $total_size = $row['usage_size']/1073741824;
+                                            $totalUsageDept = $totalUsageDept + $row['usage_size'];
+                                                                                
+                                            echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                            echo "</tr>";
+
+                                            $listNumDept++;
+                                        }
+                                        
+                                        $totalGB = $totalUsageDept/1073741824;
+
+                                        echo "<tr>";
+                                        echo "<td colspan='2' class='text-center'><b>Total</b></td>";
+                                        echo "<td class='text-right'>";
+                                        echo "<b>";
+                                        echo number_format($totalGB);                                            
+                                        echo "</b>";
+                                        echo "</td>";
+                                        echo "</tr>";
+
+                                    } else {
+
+                                        echo "<tr>";
+                                        echo "<td colspan='34' class='text-center'><b>No Data</b></td>";
+                                        echo "</tr>";
+
+                                    }
+
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -312,7 +460,7 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
             </div>
             <!-- End Departmental Summary -->
             <!-- Start Breakdown Summary -->            
-            <div class="col-12">
+            <!-- <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">2.3 Production Business Unit Breakdown Summary</h4>
@@ -375,7 +523,7 @@ list($yearParam, $monthParam) = explode("-", $dateParam);
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- End Breakdown Summary -->
         </div>
         <!-- ============================================================== -->
@@ -418,6 +566,7 @@ include "src/footer.php";
                     class="pl-3 pr-3">
                     <div class="form-group">
                         <fieldset class="form-group">
+                            <input type="text" id="paramCustID" hidden readonly name="paramCustID">
                             <input type="file" class="form-control-file" id="exampleInputFile" accept=".csv"
                                 name="file_name">
                         </fieldset>

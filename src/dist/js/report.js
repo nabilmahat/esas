@@ -19,6 +19,10 @@ $(document).ready(function () {
         });
     });
 
+    // set cust_id in param into input
+    const currentUrl = new URL(window.location.href);
+    document.getElementById('paramCustID').value = currentUrl.searchParams.get('cust_id');
+
 });
 
 // disable space typing in cust_id input

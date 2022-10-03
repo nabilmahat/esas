@@ -3,6 +3,8 @@ include "../connection/connection.php";
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
+$custID = $_POST["paramCustID"];
+
 // init object and array 'detail'
 $object = new stdClass();
 $detail = [];
@@ -12,6 +14,10 @@ $detailDate = '';
 $uploadDir = __DIR__."/../reports/";
 $fileName = $uploadDir . basename($_FILES["file_name"]["name"]);
 $uploadOk = 1;
+
+$fileInfo = pathinfo($fileName);
+
+// add file checking before process
 
 if($fileName) {
     if (move_uploaded_file($_FILES["file_name"]["tmp_name"], $fileName)) {
@@ -40,13 +46,22 @@ if($fileName) {
             foreach ($detail as $value) {
 
                 // find dir registered or not
-                $findDir = "SELECT * FROM folder WHERE folder_directory = '".$value->dir."' ";
+                $findDir = "SELECT * 
+                            FROM folder 
+                            INNER JOIN department
+                            ON folder.dept_id = department.dept_id
+                            INNER JOIN customer
+                            ON department.cust_id = customer.cust_id
+                            INNER JOIN price
+                            ON customer.cust_id = price.cust_id
+                            WHERE folder.folder_directory = '".$value->dir."'
+                            AND customer.cust_id = '".$custID."' ";
                 $execFindDir = mysqli_query($conn, $findDir);
 
                 $rowDir = mysqli_fetch_array($execFindDir, MYSQLI_ASSOC);
 
                 // dir registered
-                if (mysqli_num_rows($execFindDir)==1) {
+                if (mysqli_num_rows($execFindDir)>0) {
 
                     // find report row inserted or not
                     $findReportRow = "SELECT * FROM report 
@@ -61,9 +76,9 @@ if($fileName) {
                     } else { // report row not existed
 
                         $insertReport = "INSERT INTO 
-                                          report (folder_id, usage_size, month, year)
+                                          report (folder_id, usage_size, month, year, price_per_gb)
                                       VALUES
-                                          ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."')";
+                                          ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."', '".$rowDir['price']."')";
     
                         $execInsertReport = mysqli_query($conn, $insertReport);
 
@@ -78,8 +93,9 @@ if($fileName) {
         }
 
         echo "<script>";
-        echo "location.href = '../report-detail.php?cust_id=&report_date=".$YearString."-".$monthString."';";
-        // echo "alert(". count($detail) .");";
+        echo "console.log('".$fileInfo['extension']."');";
+        echo "location.href = '../report-detail.php?cust_id=".$custID."&report_date=".$YearString."-".$monthString."';";
+        // echo "alert('". pathinfo($fileName) ."');";
         echo "</script>";
     }
 }

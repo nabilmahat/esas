@@ -37,6 +37,21 @@ else if(isset($_SESSION['username']))
 // $result = mysqli_query($conn,$query);
 // $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 
+if(isset($_GET["cust_id"])) {
+    $checkCustomer = "SELECT * FROM customer WHERE cust_id = '".$_GET["cust_id"]."' ";
+    $execCheckCustomer = mysqli_query($conn, $checkCustomer);
+
+    $checkRow = mysqli_num_rows($execCheckCustomer);
+
+    if($checkRow==0){
+        echo "<script>";
+        echo "location.href = 'storage-user.php'";
+        echo "</script>";
+    } else {    
+        $rowCust = mysqli_fetch_array($execCheckCustomer,MYSQLI_ASSOC);
+    }
+}
+
 ?>
 
 <head>
@@ -130,7 +145,12 @@ else if(isset($_SESSION['username']))
                     <!-- ============================================================== -->
                     <!-- toggle and nav items -->
                     <!-- ============================================================== -->
-                    <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
+                    <ul class="navbar-nav float-left mr-auto ml-3 pl-1 position-relative">
+                        <?php
+                            if(isset($rowCust["cust_name"])) {
+                                echo "<h2 class='cust-name' id='custName'>".$rowCust["cust_name"]."</h2>";
+                            }
+                        ?>
                     </ul>
                     <!-- ============================================================== -->
                     <!-- Right side toggle and nav items -->
@@ -183,11 +203,11 @@ else if(isset($_SESSION['username']))
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Report</span></li>
 
-                        <li class="sidebar-item"> <a class="sidebar-link" href="report-list.php"
+                        <!-- <li class="sidebar-item"> <a class="sidebar-link" href="report-list.php"
                                 aria-expanded="false"><i data-feather="tag" class="feather-icon"></i><span
                                     class="hide-menu">Customer List
                                 </span></a>
-                        </li>
+                        </li> -->
 
                         <li class="sidebar-item"> <a class="sidebar-link" href="storage-user.php"
                                 aria-expanded="false"><i class="icon-grid"></i><span

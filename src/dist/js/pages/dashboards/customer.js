@@ -11,6 +11,9 @@ $(async function () {
         '#01caf1'
     ];
 
+    document.getElementById("totalCustomer").innerHTML = 0;
+    document.getElementById("totalUsage").innerHTML = 0;
+
     let ajaxPost = new Promise(function (resolve, reject) {
         $.post("module/dashboardCurrentUsage.php",
             {
@@ -24,6 +27,8 @@ $(async function () {
 
                 console.log(res);
                 const data = JSON.parse(res);
+
+                let totalUsage = 0;
                 if (data.length != 0) {
                     for (let d in data) {
                         let sizeData = 0;
@@ -39,8 +44,12 @@ $(async function () {
                         div += '<span class="text-muted">' + arrayData[i][0] + '</span>';
                         div += '<span class="text-dark float-right font-weight-medium">' + Math.ceil(arrayData[i][1] / 1073741824).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>';
                         div += "</li>";
+
+                        totalUsage += Math.ceil(arrayData[i][1] / 1073741824)
                     }
                     document.getElementById("customer").innerHTML = div;
+                    document.getElementById("totalCustomer").innerHTML = data.length
+                    document.getElementById("totalUsage").innerHTML = totalUsage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
 
                 var chart1 = c3.generate({

@@ -42,7 +42,7 @@ include "src/header.php";
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
                         <div>
                             <div class="d-inline-flex align-items-center">
-                                <h2 class="text-dark mb-1 font-weight-medium">236</h2>
+                                <h2 class="text-dark mb-1 font-weight-medium" id="totalCustomer"></h2>
                             </div>
                             <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Total Customers</h6>
                         </div>
@@ -56,7 +56,7 @@ include "src/header.php";
                 <div class="card-body">
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
                         <div>
-                            <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium">10,564,584</h2>
+                            <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium" id="totalUsage"></h2>
                             <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Current Storage Usage (GB)
                             </h6>
                         </div>
@@ -70,7 +70,7 @@ include "src/header.php";
                 <div class="card-body">
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
                         <div>
-                            <h2 class="text-dark mb-1 font-weight-medium">RM 0.04</h2>
+                            <h2 class="text-dark mb-1 font-weight-medium" id="totalRevenue"></h2>
                             <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Current total revenue</h6>
                         </div>
                         <div class="ml-auto mt-md-3 mt-lg-0">
@@ -103,7 +103,7 @@ include "src/header.php";
                         <h4 class="card-title">Revenue By Month</h4>
                         <div class="net-income mt-4 position-relative" style="height:294px;"></div>
                         <ul class="list-inline text-center mt-5 mb-2">
-                            <li class="list-inline-item text-muted font-italic">Revenue per month (RM)</li>
+                            <li class="list-inline-item text-muted font-italic">Revenue per month before tax (RM)</li>
                         </ul>
                     </div>
                 </div>
@@ -126,7 +126,7 @@ include "src/header.php";
                             <div class="stats ct-charts position-relative" style="height: 315px;"></div>
                         </div>
                         <ul class="list-inline text-center mt-4 mb-0">
-                            <li class="list-inline-item text-muted font-italic">Earnings for this month</li>
+                            <li class="list-inline-item text-muted font-italic">Storage Usage by month (Petabytes)</li>
                         </ul>
                     </div>
                 </div>

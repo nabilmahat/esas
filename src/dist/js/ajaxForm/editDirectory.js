@@ -1,26 +1,28 @@
-let deptID = "";
+let foldID = "";
+let oldDir = "";
 
 $(document).ready(function () {
 
-    $('#dir').keypress(function (e) {
+    $('#edit_dir').keypress(function (e) {
         if (e.which === 32)
             return false;
     });
 
     // Add Customer
-    $("#addDirectory").click(function () {
+    $("#editDirectory").click(function () {
 
         const currentUrl = new URL(window.location.href);
 
-        const dir = document.getElementById("dir").value;
-        const dir_name = document.getElementById("dir_name").value;
+        const dir = document.getElementById("edit_dir").value;
+        const dir_name = document.getElementById("edit_dir_name").value;
         const cust_id = currentUrl.searchParams.get('cust_id');
 
         if ((cust_id.length !== 0) && (dir.length !== 0) && (dir_name.length !== 0)) {
 
-            $.post("module/addDirectory.php",
+            $.post("module/editDirectory.php",
                 {
                     dir: dir.replace(/\s/g, ''),
+                    old_dir: oldDir,
                     dir_name: dir_name,
                     cust_id: cust_id,
                     dept_id: deptID
@@ -49,18 +51,21 @@ $(document).ready(function () {
     });
 
     // button cancel
-    $("#cancelAddDir").click(function () {
+    $("#cancelEditDir").click(function () {
 
-        document.getElementById("dir").value = "";
-        document.getElementById("dir-error").style.display = "none";
-        document.getElementById("dir-error-exist").style.display = "none";
-        document.getElementById("dir_name").value = "";
-        document.getElementById("dir-name-error").style.display = "none";
+        document.getElementById("edit_dir").value = "";
+        document.getElementById("edit-dir-error").style.display = "none";
+        document.getElementById("edit-dir-error-exist").style.display = "none";
+        document.getElementById("edit_dir_name").value = "";
+        document.getElementById("edit-dir-name-error").style.display = "none";
     });
 
 });
 
 // set folder name
-function setFolderName(folder) {
-    deptID = folder;
+function setDirectoryName(fold_id, fold_dir, fold_name) {
+    foldID = fold_id;
+    oldDir = fold_dir;
+    document.getElementById("edit_dir").value = fold_dir;
+    document.getElementById("edit_dir_name").value = fold_name;
 }

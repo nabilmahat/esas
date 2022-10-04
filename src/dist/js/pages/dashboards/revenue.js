@@ -3,6 +3,7 @@ $(async function () {
     // chart data
     const d = new Date();
     let year = d.getFullYear();
+    let month = d.getMonth();
 
     let arrayData = [];
     let colorArray = [
@@ -11,6 +12,9 @@ $(async function () {
         '#01caf1'
     ];
 
+    let totalRevenue = 0.00;
+    document.getElementById("totalRevenue").innerHTML = totalRevenue;
+
     let ajaxPost = new Promise(function (resolve, reject) {
         $.post("module/revenue.php",
             {
@@ -18,20 +22,24 @@ $(async function () {
             },
             async function (res, status) {
 
-                console.log(res);
+                // console.log(res);
                 const resData = JSON.parse(res);
 
                 if (resData.length != 0) {
                     for (let rd in resData) {
                         if (resData[rd].total_usage != 0) {
-                            arrayData.push(((resData[rd].total_usage/1073741824)*resData[rd].price).toFixed(2));
+                            arrayData.push(((resData[rd].total_usage / 1073741824) * resData[rd].price).toFixed(2));
                         } else {
                             arrayData.push(0);
                         }
+
+                        totalRevenue = ((resData[month].total_usage / 1073741824) * resData[month].price).toFixed(2)
+                        document.getElementById("totalRevenue").innerHTML = "RM " + totalRevenue;
                     }
                 }
 
-                console.log(arrayData);
+                // console.log(month);
+                // console.log(arrayData);
 
                 // ============================================================== 
                 // income
@@ -71,6 +79,8 @@ $(async function () {
                     }]
                 ];
                 new Chartist.Bar('.net-income', data, options, responsiveOptions);
+
+                // set dashboard total revenue
             });
         resolve(arrayData);
     });

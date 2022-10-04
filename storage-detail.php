@@ -77,6 +77,22 @@ if(isset($custParam)) {
                     echo "<h4 class='card-title'>".$row["dept_name"]."</h4>";
                     echo "</div>";
                     echo "<div class='col-md-4 text-right'>";
+                    echo "<button type='button' class='btn btn-sm btn-info btn-rounded' data-toggle='modal'";
+                    echo 'data-target="#edit-department-modal" onclick="setDeptName(';
+                    echo "'";
+                    echo $row["dept_id"];
+                    echo "'";
+                    echo ",";
+                    echo "'";
+                    echo $row["dept_name"];
+                    echo "'";
+                    echo ",";
+                    echo "'";
+                    echo $row["dept_desc"];
+                    echo "'";
+                    echo ')" >';
+                    echo "<i class='fas fa-pencil-alt'></i> Department";
+                    echo "</button>&nbsp;&nbsp;";
                     echo "<button type='button' class='btn btn-sm btn-danger btn-rounded' data-toggle='modal'";
                     echo 'data-target="#directory-modal" onclick="setFolderName(';
                     echo "'";
@@ -123,7 +139,19 @@ if(isset($custParam)) {
                         echo "<td>".$rowDir["folder_name"]."</td>";
                         echo "<td>";
                         echo "<button type='button' class='btn btn-sm btn-info btn-rounded'";
-                        echo "data-toggle='modal' data-target='#edit-modal'>";
+                        echo 'data-toggle="modal" data-target="#edit-directory-modal" onclick="setDirectoryName(';
+                        echo "'";
+                        echo $rowDir["folder_id"];
+                        echo "'";
+                        echo ",";
+                        echo "'";
+                        echo $rowDir["folder_directory"];
+                        echo "'";
+                        echo ",";
+                        echo "'";
+                        echo $rowDir["folder_name"];
+                        echo "'";
+                        echo ')" >';
                         echo "<i class='fas fa-pencil-alt'></i> Edit";
                         echo "</button>";
                         echo "&nbsp;&nbsp;";
@@ -211,6 +239,46 @@ include "src/footer.php";
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Edit Department modal content -->
+<div id="edit-department-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    <h4 class="card-title">Edit Department</h4>
+                </div>
+                <form action="#" class="pl-3 pr-3">
+                    <div class="form-group">
+                        <label for="">Department Name</label>
+                        <input type="text" class="form-control" placeholder="Production" id="dept_name_edit" name="dept_name_edit"
+                            required="" maxlength="255">
+                        <div class="invalid-feedback" id="edit-dept-name-error" style="display: none">
+                            Department Name is required!
+                        </div>
+                        <div class="invalid-feedback" id="edit-dept-name-error-exist" style="display: none">
+                            Department Name already exist, please insert another Department Name.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Department Description</label>
+                        <input type="text" class="form-control" placeholder="Description" id="dept_desc_edit"
+                            name="dept_desc_edit" required="" maxlength="255">
+                        <div class="invalid-feedback" id="edit-dept-desc-error" style="display: none">
+                            Department Description is required!
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-danger" type="button" data-dismiss="modal"
+                            id="cancelEditDept">Cancel</button>
+                        <button class="btn btn-rounded btn-success" type="button" id="editDepartment">Save
+                            Department</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <!-- Add Directory modal content -->
 <div id="directory-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -248,7 +316,7 @@ include "src/footer.php";
 </div><!-- /.modal -->
 
 <!-- Edit Directory modal content -->
-<div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="edit-directory-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
@@ -258,16 +326,24 @@ include "src/footer.php";
                 <form action="#" class="pl-3 pr-3">
                     <div class="form-group">
                         <label for="">Directory</label>
-                        <input type="text" class="form-control" id="placeholder" placeholder="Directory"
-                            value="/ifs/MXFSERVER">
+                        <input type="text" class="form-control" id="edit_dir" name="edit_dir" placeholder="/folder/dir">
+                        <div class="invalid-feedback" id="edit-dir-error" style="display: none">
+                            Directory is required!
+                        </div>
+                        <div class="invalid-feedback" id="edit-dir-error-exist" style="display: none">
+                            Directory is already been used, please insert new directory.
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="">Folder Name</label>
-                        <input type="text" class="form-control" id="placeholder" placeholder="Folder Name"
-                            value="ESAS MXFSERVER">
+                        <label for="">Directory Name</label>
+                        <input type="text" class="form-control" id="edit_dir_name" name="edit_dir_name" placeholder="Directory Name">
+                        <div class="invalid-feedback" id="edit-dir-name-error" style="display: none">
+                            Directory Name Name is required!
+                        </div>
                     </div>
                     <div class="form-group text-center">
-                        <button class="btn btn-rounded btn-primary" type="submit">Save</button>
+                        <button class="btn btn-rounded btn-danger" type="button" data-dismiss="modal" id="cancelEditDir">Cancel</button>
+                        <button class="btn btn-rounded btn-success" type="button" id="editDirectory">Save Directory</button>
                     </div>
                 </form>
             </div>
@@ -276,6 +352,8 @@ include "src/footer.php";
 </div><!-- /.modal -->
 
 <script src="src/dist/js/ajaxForm/addDepartment.js"></script>
+<script src="src/dist/js/ajaxForm/editDepartment.js"></script>
 <script src="src/dist/js/ajaxForm/addDirectory.js"></script>
+<script src="src/dist/js/ajaxForm/editDirectory.js"></script>
 
 </html>

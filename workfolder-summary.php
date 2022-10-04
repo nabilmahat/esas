@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
-
-
 <?php 
 include "src/header.php"
 ?>

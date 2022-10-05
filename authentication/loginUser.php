@@ -28,9 +28,7 @@ if($count==1){
     	
         // set user_role session
     	$_SESSION['user_role'] = $user_role;
-    	echo "<script>";
-		echo "location.href = '../index.php';";
-		echo "</script>";
+    	echo "success";
     }
 	// else if($user_type=='Counselor'){       
 	    
@@ -49,9 +47,7 @@ if($count==1){
 }
 else
 {
-	echo "<script> alert('Wrong Email Or Password');";
-	echo "location.href = '../login.php';";
-	echo "</script>";
+	echo "failed";
 }
 
 ?>

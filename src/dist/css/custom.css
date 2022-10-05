@@ -28,4 +28,14 @@ input[type=number]::-webkit-outer-spin-button {
 .cust-name {
     margin-top: 10px;
     margin-left: 15px;
+    color: black;
+}
+
+.pencil-edit {
+    cursor: pointer;
+}
+
+.cust-edit {
+    cursor: pointer;
+    font-size: 1.5vw;
 }

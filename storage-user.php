@@ -17,11 +17,11 @@ $execListCustomer = mysqli_query($conn, $listCustomer);
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-7 align-self-center">
-                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">User Management</h4>
+                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Customer Management</h4>
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item text-muted active" aria-current="page">User Management</li>
+                            <li class="breadcrumb-item text-muted active" aria-current="page">Customer Management</li>
                         </ol>
                     </nav>
                 </div>
@@ -78,12 +78,12 @@ $execListCustomer = mysqli_query($conn, $listCustomer);
                                         echo "</a>";
                                         echo "&nbsp;&nbsp;";
                                         echo "<a href='storage-detail.php?cust_id=".$row['cust_id']."' class='btn btn-sm btn-success btn-rounded'";
-                                        echo "data-toggle='tooltip' data-placement='top' title='View Detail'>";
+                                        echo "data-toggle='tooltip' data-placement='top' title='View Customer Detail'>";
                                         echo "Detail";
                                         echo "</a>";
                                         echo "&nbsp;&nbsp;";
-                                        echo "<a href='storage-detail.php?cust_id=".$row['cust_id']."' class='btn btn-sm btn-danger btn-rounded'";
-                                        echo "data-toggle='tooltip' data-placement='top' title='View Detail'>";
+                                        echo "<a href='#' class='btn btn-sm btn-danger btn-rounded'";
+                                        echo "data-toggle='tooltip' data-placement='top' title='Delete Customer'>";
                                         echo "Delete";
                                         echo "</a>";
                                         echo "</td>";

@@ -1,5 +1,6 @@
 let foldID = "";
 let oldDir = "";
+let deptIdDir = "";
 
 $(document).ready(function () {
 
@@ -21,11 +22,12 @@ $(document).ready(function () {
 
             $.post("module/editDirectory.php",
                 {
+                    dir_id: foldID,
                     dir: dir.replace(/\s/g, ''),
                     old_dir: oldDir,
                     dir_name: dir_name,
                     cust_id: cust_id,
-                    dept_id: deptID
+                    dept_id: deptIdDir
                 },
                 function (res, status) {
                     console.log(res);
@@ -34,8 +36,8 @@ $(document).ready(function () {
                         // success alert
                         location.reload();
                     } else {
-                        if (data.message === "dir_existed") {
-                            document.getElementById("dir-error-exist").style.display = "block";
+                        if (data.message === "duplicate_dir_name") {
+                            document.getElementById("edit-dir-error-exist").style.display = "block";
                         } else if (data.message === "") {
 
                         }
@@ -43,10 +45,10 @@ $(document).ready(function () {
                 });
         }
         if (dir.length === 0) {
-            document.getElementById("dir-error").style.display = "block";
+            document.getElementById("edit-dir-error").style.display = "block";
         }
         if (dir_name.length === 0) {
-            document.getElementById("dir-name-error").style.display = "block";
+            document.getElementById("edit-dir-name-error").style.display = "block";
         }
     });
 
@@ -63,9 +65,10 @@ $(document).ready(function () {
 });
 
 // set folder name
-function setDirectoryName(fold_id, fold_dir, fold_name) {
+function setDirectoryName(fold_id, fold_dir, fold_name, dept_id) {
     foldID = fold_id;
     oldDir = fold_dir;
     document.getElementById("edit_dir").value = fold_dir;
     document.getElementById("edit_dir_name").value = fold_name;
+    deptIdDir = dept_id;
 }

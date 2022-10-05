@@ -34,7 +34,7 @@ if(isset($custParam)) {
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="storage-user.php" class="text-muted">User
+                            <li class="breadcrumb-item"><a href="storage-user.php" class="text-muted">Customer
                                     Management</a></li>
                             <li class="breadcrumb-item text-muted active" aria-current="page">Department List</li>
                         </ol>
@@ -70,10 +70,8 @@ if(isset($custParam)) {
                     echo "<div class='card-body'>";
                     echo "<div class='customize-input row'>";
                     echo "<div class='col-md-8'>";
-                    echo "<h4 class='card-title'>".$row["dept_name"]."</h4>";
-                    echo "</div>";
-                    echo "<div class='col-md-4 text-right'>";
-                    echo "<button type='button' class='btn btn-sm btn-info btn-rounded' data-toggle='modal'";
+                    echo "<h4 class='card-title'>".$row["dept_name"]." <i class='fas fa-pencil-alt pencil-edit'";
+                    echo "data-toggle='modal'";
                     echo 'data-target="#edit-department-modal" onclick="setDeptName(';
                     echo "'";
                     echo $row["dept_id"];
@@ -86,10 +84,11 @@ if(isset($custParam)) {
                     echo "'";
                     echo $row["dept_desc"];
                     echo "'";
-                    echo ')" >';
-                    echo "<i class='fas fa-pencil-alt'></i> Department";
-                    echo "</button>&nbsp;&nbsp;";
-                    echo "<button type='button' class='btn btn-sm btn-danger btn-rounded' data-toggle='modal'";
+                    echo ')"';
+                    echo " data-placement='top' title='Edit Department'></i></h4>";
+                    echo "</div>";
+                    echo "<div class='col-md-4 text-right'>";
+                    echo "<button disabled='' type='button' class='btn btn-sm btn-danger btn-rounded' data-toggle='modal'";
                     echo 'data-target="#directory-modal" onclick="setFolderName(';
                     echo "'";
                     echo $row["dept_id"];
@@ -147,11 +146,15 @@ if(isset($custParam)) {
                         echo "'";
                         echo $rowDir["folder_name"];
                         echo "'";
+                        echo ",";
+                        echo "'";
+                        echo $row["dept_id"];
+                        echo "'";
                         echo ')" >';
                         echo "<i class='fas fa-pencil-alt'></i> Edit";
                         echo "</button>";
                         echo "&nbsp;&nbsp;";
-                        echo "<button type='button' class='btn btn-sm btn-danger btn-rounded'>";
+                        echo "<button disabled='' type='button' class='btn btn-sm btn-danger btn-rounded'>";
                         echo "<i class='fas fa-trash'></i> Delete";
                         echo "</button>";
                         echo "</td>";
@@ -347,9 +350,67 @@ include "src/footer.php";
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Edit Customer Detail modal content -->
+<div id="edit-customer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    <h4 class="card-title">Edit customer detail</h4>
+                </div>
+                <form action="#" class="pl-3 pr-3">
+                    <div class="form-body">
+                        <label>Customer Name </label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Customer Name" id="cust_name" name="cust_name" required="" maxlength="255">
+                                    <div class="invalid-feedback" id="cust-name-error" style="display: none">
+                                        Customer Name is required!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label>Customer Description </label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Customer Description" id="cust_desc" name="cust_desc" required="" maxlength="64">
+                                    <div class="invalid-feedback" id="cust-desc-error" style="display: none">
+                                        Customer Description is required!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label>Price per GB (RM) </label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="0.02 | 245.00" id="cust_price" name="cust_price" required="">
+                                    <div class="invalid-feedback" id="cust-price-error" style="display: none">
+                                        Price is required!
+                                    </div>
+                                    <div class="invalid-feedback" id="cust-price-error-value" style="display: none">
+                                        Price cannot be less than 0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-danger" type="button" data-dismiss="modal" id="cancelEdit">Cancel</button>
+                        <button class="btn btn-rounded btn-success" type="button" id="addCustomer">Save Customer</button>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script src="src/dist/js/ajaxForm/addDepartment.js"></script>
 <script src="src/dist/js/ajaxForm/editDepartment.js"></script>
 <script src="src/dist/js/ajaxForm/addDirectory.js"></script>
 <script src="src/dist/js/ajaxForm/editDirectory.js"></script>
+<script src="src/dist/js/ajaxForm/editCustomer.js"></script>
 
 </html>

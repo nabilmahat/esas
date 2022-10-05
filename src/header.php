@@ -38,7 +38,7 @@ else if(isset($_SESSION['username']))
 // $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 
 if(isset($_GET["cust_id"])) {
-    $checkCustomer = "SELECT * FROM customer WHERE cust_id = '".$_GET["cust_id"]."' ";
+    $checkCustomer = "SELECT * FROM customer INNER JOIN price ON customer.cust_id = price.cust_id WHERE customer.cust_id = '".$_GET["cust_id"]."' ";
     $execCheckCustomer = mysqli_query($conn, $checkCustomer);
 
     $checkRow = mysqli_num_rows($execCheckCustomer);
@@ -151,7 +151,26 @@ if(isset($_GET["cust_id"])) {
                     <ul class="navbar-nav float-left mr-auto ml-3 pl-1 position-relative">
                         <?php
                             if(isset($rowCust["cust_name"])) {
-                                echo "<h2 class='cust-name' id='custName'>".$rowCust["cust_name"]."</h2>";
+                                echo "<h2 class='cust-name' id='custName'>".$rowCust["cust_name"]." <i class='fas fa-pencil-alt pencil-edit cust-edit'";
+                                echo "data-toggle='modal'";
+                                echo 'data-target="#edit-customer-modal" onclick="setCustDetail(';
+                                echo "'";
+                                echo $rowCust["cust_id"];
+                                echo "'";
+                                echo ",";
+                                echo "'";
+                                echo $rowCust["cust_name"];
+                                echo "'";
+                                echo ",";
+                                echo "'";
+                                echo $rowCust["cust_description"];
+                                echo "'";
+                                echo ",";
+                                echo "'";
+                                echo $rowCust["price"];
+                                echo "'";
+                                echo ')"';
+                                echo " data-placement='top' title='Edit Customer Detail'></i></h2>";
                             }
                         ?>
                     </ul>
@@ -165,10 +184,10 @@ if(isset($_GET["cust_id"])) {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <img src="src/assets/images/users/profile-pic.jpg" alt="user" class="rounded-circle"
+                                <img src="src/assets/images/esas_icon.png" alt="user" class="rounded-circle"
                                     width="40">
                                 <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
-                                        class="text-dark">Jason Doe</span> <i data-feather="chevron-down"
+                                        class="text-dark"><?php echo $_SESSION["username"]; ?></span> <i data-feather="chevron-down"
                                         class="svg-icon"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">

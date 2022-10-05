@@ -6,7 +6,8 @@
 <!-- footer -->
 <!-- ============================================================== -->
 <footer class="footer text-center text-muted">
-    All Rights Reserved by Adminmart. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+<!-- All Rights Reserved by Adminmart. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>. -->
+    All Rights Reserved by ESAS Cloud © <b id="year"></b>
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->

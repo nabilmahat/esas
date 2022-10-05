@@ -1,40 +1,39 @@
+let custID = '';
+
 $(document).ready(function () {
 
     // Add Customer
     $("#addCustomer").click(function () {
-
-        const cust_id = document.getElementById("cust_id").value;
         const cust_name = document.getElementById("cust_name").value;
         const cust_desc = document.getElementById("cust_desc").value;
         const cust_price = document.getElementById("cust_price").value;
 
-        if ((cust_id.length !== 0) &&
+        if ((custID.length !== 0) &&
             (cust_name.length !== 0) &&
             (cust_desc.length !== 0) &&
             (cust_price.length !== 0 && cust_price > 0)) {
 
-            $.post("module/addCustomer.php",
-                {
-                    cust_id: document.getElementById("cust_id").value,
-                    cust_name: document.getElementById("cust_name").value,
-                    cust_desc: document.getElementById("cust_desc").value,
-                    cust_price: document.getElementById("cust_price").value
-                },
+            $.post("module/editCustomer.php", {
+                cust_id: custID,
+                cust_name: document.getElementById("cust_name").value,
+                cust_desc: document.getElementById("cust_desc").value,
+                cust_price: document.getElementById("cust_price").value
+            },
                 function (res, status) {
                     const data = JSON.parse(res);
-                    if(data.status === true) {
+                    if (data.status === true) {
                         // success alert
                         location.reload();
                     } else {
-                        if(data.message === "customer_id_existed") {
+                        if (data.message === "customer_id_existed") {
                             document.getElementById("cust-id-error-exist").style.display = "block";
-                        } else if(data.message === "") {
-                            
+                        } else if (data.message === "") {
+
                         }
                     }
                 });
         }
-        if (cust_id.length === 0) {
+        if (custID.length === 0) {
             document.getElementById("cust-id-error").style.display = "block";
         }
         if (cust_name.length === 0) {
@@ -52,10 +51,7 @@ $(document).ready(function () {
     });
 
     // button cancel
-    $("#cancelAdd").click(function () {
-
-        document.getElementById("cust_id").value = "";
-        document.getElementById("cust-id-error").style.display = "none";
+    $("#cancelEdit").click(function () {        
         document.getElementById("cust_name").value = "";
         document.getElementById("cust-name-error").style.display = "none";
         document.getElementById("cust_desc").value = "";
@@ -65,3 +61,10 @@ $(document).ready(function () {
         document.getElementById("cust-price-error-value").style.display = "none";
     });
 });
+
+function setCustDetail(cust_id, cust_name, cust_description, price) {
+    custID = cust_id;
+    document.getElementById("cust_name").value = cust_name;
+    document.getElementById("cust_desc").value = cust_description;
+    document.getElementById("cust_price").value = price;
+}

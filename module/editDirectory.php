@@ -3,40 +3,80 @@ include "../connection/connection.php";
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-$custId = mysqli_escape_string($conn,$_POST['cust_id']);
+$dirID = mysqli_escape_string($conn,$_POST['dir_id']);
 $dir = mysqli_escape_string($conn,$_POST['dir']);
+$oldDir = mysqli_escape_string($conn,$_POST['old_dir']);
 $dirName = mysqli_escape_string($conn,$_POST['dir_name']);
+$custID = mysqli_escape_string($conn,$_POST['cust_id']);
 $deptID = mysqli_escape_string($conn,$_POST['dept_id']);
 
-$findDir = "SELECT * 
-            FROM folder 
-            INNER JOIN department ON folder.dept_id = department.dept_id
-            INNER JOIN customer ON department.cust_id = customer.cust_id
-            WHERE customer.cust_id = '".$custId."' AND folder.folder_directory = '".$dir."' AND department.dept_id = '".$deptID."' ";
+$findDeptFold = "SELECT * FROM folder 
+                INNER JOIN department ON folder.dept_id = department.dept_id
+                WHERE folder.dept_id = '".$deptID."' AND folder.folder_id = '".$dirID."'; ";
+$execFindDeptFold = mysqli_query($conn, $findDeptFold);
 
-$execFindDir = mysqli_query($conn, $findDir);
+$numRows = mysqli_num_rows($execFindDeptFold);
 
-$countDir = mysqli_num_rows($execFindDir);
+if ($numRows == 1) {
 
-if($countDir == 0) {
+    if ($dir == $oldDir) {
 
-    $folder_id = $custId."_".strtolower(str_replace(" ", "", $dirName));
+        $queryUpdateDir = "UPDATE folder
+                                    SET folder_directory = '".$dir."', folder_name = '".$dirName."'
+                                    WHERE folder_id = '".$dirID."' ";
+        $execQueryUpdateDir = mysqli_query($conn, $queryUpdateDir);
 
-    $queryInsertFolder = "INSERT INTO folder (folder_id, folder_directory, folder_name, folder_desc, dept_id)
-                            VALUES ('".$folder_id."', '".$dir."', '".$dirName."', '".$dirName."', '".$deptID."')";
-    $execQueryInsertFolder = mysqli_query($conn, $queryInsertFolder);
+        if ($execQueryUpdateDir) {
+            echo json_encode((object)[
+                'status' => true,
+                'message' => "success_update_dir"
+            ]);
+        } else {
+            echo json_encode((object)[
+                'status' => false,
+                'message' => "failed_update_dir"
+            ]);
+        } 
 
-    if ($execQueryInsertFolder) {
+    } else {
 
-        echo json_encode((object)[
-            'status' => true,
-            'message' => "success_create_dir"
-        ]); 
+        $checkDirName = "SELECT * FROM folder WHERE folder_directory = '".$dir."' AND dept_id = '".$deptID."' ";
+        $execCheckDirname = mysqli_query($conn, $checkDirName);
+        $countDirName = mysqli_num_rows($execCheckDirname);
+
+        if ($countDirName > 0) {
+            echo json_encode((object)[
+                'status' => false,
+                'message' => "duplicate_dir_name"
+            ]);
+        } else {
+
+            $queryUpdateDir = "UPDATE folder
+                                    SET folder_directory = '".$dir."', folder_name = '".$dirName."'
+                                    WHERE folder_id = '".$dirID."' ";
+            $execQueryUpdateDir = mysqli_query($conn, $queryUpdateDir);
+
+            if ($execQueryUpdateDir) {
+                echo json_encode((object)[
+                    'status' => true,
+                    'message' => "success_update_dir"
+                ]);
+            } else {
+                echo json_encode((object)[
+                    'status' => false,
+                    'message' => "failed_update_dir"
+                ]);
+            } 
+
+        }
+
     }
+
 } else {
     echo json_encode((object)[
         'status' => false,
-        'message' => "dir_existed"
+        'data' => 'dir_not_exist',
+        'result' => $numRows
     ]);
 }
 

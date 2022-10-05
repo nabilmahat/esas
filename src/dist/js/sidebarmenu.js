@@ -56,5 +56,8 @@ $(function() {
     $('#sidebarnav >li >a.has-arrow').on('click', function (e) {
         e.preventDefault();
     });
+
+    let today = new Date();
+    document.getElementById('year').innerHTML = today.getFullYear();
     
 });

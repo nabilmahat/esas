@@ -42,7 +42,8 @@
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
             style="background:url(src/assets/images/big/auth-bg.jpg) no-repeat center center;">
             <div class="auth-box row">
-                <div class="col-lg-7 col-md-5 modal-bg-img" style="background-image: url(src/assets/images/big/datastore.jpg);">
+                <div class="col-lg-7 col-md-5 modal-bg-img"
+                    style="background-image: url(src/assets/images/big/datastore.jpg);">
                 </div>
                 <div class="col-lg-5 col-md-7 bg-white">
                     <div class="p-3">
@@ -53,13 +54,16 @@
                         <p class="text-center">
                             <!-- Enter your email address and password to access admin panel. -->
                         </p>
-                        <form class="mt-4" action="authentication/loginUser.php" id="loginForm" method="POST">
+                        <form class="mt-4" action="#" id="loginForm">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="text-dark" for="uname">Username</label>
                                         <input class="form-control" id="username" type="text" name="username"
                                             placeholder="Enter your username">
+                                        <div class="invalid-feedback" id="username-empty" style="display: none">
+                                            Please enter username.
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -67,13 +71,19 @@
                                         <label class="text-dark" for="pwd">Password</label>
                                         <input class="form-control" id="password" type="password" name="password"
                                             placeholder="Enter your password">
+                                        <div class="invalid-feedback" id="password-empty" style="display: none">
+                                            Please enter password.
+                                        </div>
+                                        <div class="invalid-feedback" id="failed-login" style="display: none">
+                                            Invalid sign in credential. Please try again.
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 text-center">
-                                    <button type="submit" class="btn btn-block btn-dark">Sign In</button>
+                                    <button type="button" id="signin" class="btn btn-block btn-dark">Sign In</button>
                                 </div>
                                 <div class="col-lg-12 text-center mt-5">
-                                    
+
                                 </div>
                             </div>
                         </form>
@@ -96,8 +106,9 @@
     <!-- This page plugin js -->
     <!-- ============================================================== -->
     <script>
-        $(".preloader ").fadeOut();
+    $(".preloader ").fadeOut();
     </script>
+    <script src="src/dist/js/ajaxForm/login.js"></script>
 </body>
 
 </html>

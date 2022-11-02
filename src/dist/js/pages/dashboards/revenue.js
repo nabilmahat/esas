@@ -12,6 +12,16 @@ $(async function () {
         '#01caf1'
     ];
 
+    if (!window.location.search) {
+        console.log('takde');
+    } else {
+        console.log('ada');
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('report_date').split('-');
+        year = dateParam[0];
+        month = dateParam[1];
+    }
+
     let totalRevenue = 0.00;
     document.getElementById("totalRevenue").innerHTML = totalRevenue;
 
@@ -60,7 +70,7 @@ $(async function () {
                         top: 15,
                         right: 15,
                         bottom: 5,
-                        left: 0
+                        left: 15
                     },
                     plugins: [
                         Chartist.plugins.tooltip()

@@ -4,6 +4,12 @@ include "../connection/connection.php";
 $month = date('m');
 $year = date('Y');
 
+if (isset($_POST["year"])) {
+    echo "<script>";
+    echo "alert('ADA');";
+    echo "</script>";
+}
+
 $chart2 = [];
 $monthArray = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 // total/1073741824

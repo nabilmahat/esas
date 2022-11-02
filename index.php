@@ -1,5 +1,12 @@
 <?php 
 include "src/header.php";
+
+if (isset($_GET["report_date"])) {
+    $dateParam = $_GET["report_date"];
+} else {
+    $dateParam = date('Y-m');
+}
+
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -19,6 +26,16 @@ include "src/header.php";
                             </li>
                         </ol>
                     </nav>
+                </div>
+            </div>
+            <div class="col-5 align-self-center">
+                <div class="customize-input float-right">
+                    <div class="form-group">
+                        Select report month:
+                        <?php
+                        echo "<input type='month' id='report-date' onchange='selectDate()' class='form-control bg-white border-0 custom-shadow' value='".$dateParam."'>"
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,6 +162,7 @@ include "src/footer.php";
 ?>
 </body>
 
+<script src="src/dist/js/report.js"></script>
 <script src="src/dist/js/pages/dashboards/customer.js"></script>
 <script src="src/dist/js/pages/dashboards/revenue.js"></script>
 <script src="src/dist/js/pages/dashboards/storage.js"></script>

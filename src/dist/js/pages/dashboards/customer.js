@@ -3,6 +3,7 @@ $(async function () {
     // chart data
     const d = new Date();
     let year = d.getFullYear();
+    let month = d.getMonth()+1; // +1 because in db april == 04
 
     let arrayData = [];
     let colorArray = [
@@ -11,13 +12,25 @@ $(async function () {
         '#01caf1'
     ];
 
+    if (!window.location.search) {
+        console.log(' ');
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('report_date').split('-');
+        year = dateParam[0];
+        month = dateParam[1];
+        
+        console.log(year);
+    }
+
     document.getElementById("totalCustomer").innerHTML = 0;
     document.getElementById("totalUsage").innerHTML = 0;
 
     let ajaxPost = new Promise(function (resolve, reject) {
         $.post("module/dashboardCurrentUsage.php",
             {
-                year: year
+                year: year,
+                month: month
             },
             async function (res, status) {
 

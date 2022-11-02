@@ -1,8 +1,13 @@
 <?php
 include "../connection/connection.php";
 
-$month = date('m');
-$year = date('Y');
+if(isset($_POST["year"])&&isset($_POST["month"])) {
+    $year = $_POST["year"];
+    $month = $_POST["month"];
+} else {
+    $month = date('m');
+    $year = date('Y');
+}
 
 $chart1 = [];
 

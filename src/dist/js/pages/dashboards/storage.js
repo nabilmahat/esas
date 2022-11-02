@@ -10,6 +10,16 @@ $(async function () {
         '#ff4f70',
         '#01caf1'
     ];
+
+    if (!window.location.search) {
+        console.log(' ');
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('report_date').split('-');
+        year = dateParam[0];
+        month = dateParam[1]-1; // -1 because array start with 0
+    }
+    
     let ajaxPost = new Promise(function (resolve, reject) {
         $.post("module/revenue.php",
             {

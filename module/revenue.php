@@ -1,13 +1,10 @@
 <?php
 include "../connection/connection.php";
 
-$month = date('m');
-$year = date('Y');
-
-if (isset($_POST["year"])) {
-    echo "<script>";
-    echo "alert('ADA');";
-    echo "</script>";
+if(isset($_POST["year"])) {
+    $year = $_POST["year"];
+} else {
+    $year = date('Y');
 }
 
 $chart2 = [];

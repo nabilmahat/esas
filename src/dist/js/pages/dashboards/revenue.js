@@ -13,13 +13,12 @@ $(async function () {
     ];
 
     if (!window.location.search) {
-        console.log('takde');
+        console.log(' ');
     } else {
-        console.log('ada');
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('report_date').split('-');
         year = dateParam[0];
-        month = dateParam[1];
+        month = dateParam[1]-1; // -1 because array start with 0
     }
 
     let totalRevenue = 0.00;

@@ -3,10 +3,7 @@ include "../connection/connection.php";
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-$reportDate = $_POST["reportDate"];
 $custID = $_POST["paramCustID"];
-
-list($YearString, $monthString) = explode("-", $reportDate);
 
 // init object and array 'detail'
 $object = new stdClass();
@@ -19,7 +16,7 @@ $fileName = $uploadDir . basename($_FILES["file_name"]["name"]);
 $uploadOk = 1;
 
 $fileInfo = pathinfo($fileName);
-$hashedFile = sha1($_FILES["file_name"]["name"]);
+
 // add file checking before process
 
 if($fileName) {
@@ -43,8 +40,8 @@ if($fileName) {
             // get detail from millisecond
             $detailDate = substr($detailDate, strpos($detailDate, ":") + 1);    
 
-            // $monthString = date("m", $detailDate);
-            // $YearString = date("Y", $detailDate);
+            $monthString = date("m", $detailDate);
+            $YearString = date("Y", $detailDate);
 
             foreach ($detail as $value) {
 
@@ -68,7 +65,7 @@ if($fileName) {
 
                     // find report row inserted or not
                     $findReportRow = "SELECT * FROM report 
-                                    WHERE folder_id = '".$rowDir['folder_id']."' AND month = '". $monthString ."' AND year = '". $YearString ."' AND file_hash = '". $hashedFile ."' ";
+                                    WHERE folder_id = '".$rowDir['folder_id']."' AND month = '". $monthString ."' AND year = '". $YearString ."' ";
                     $execfindReportRow = mysqli_query($conn, $findReportRow);
 
                     $rowReport = mysqli_fetch_array($execfindReportRow, MYSQLI_ASSOC);
@@ -76,16 +73,12 @@ if($fileName) {
                     // report row existed => add to current row / ignore
                     if (mysqli_num_rows($execfindReportRow)==1) {
 
-                        // update usage value
-                        $newSize = (int)$rowReport['usage_size'] + (int)$value->size;
-                        $updateQuery = "UPDATE report SET usage_size = '".$newSize."' WHERE id = '".$rowReport['id']."' ";
-
                     } else { // report row not existed
 
                         $insertReport = "INSERT INTO 
-                                          report (folder_id, usage_size, month, year, file_hash, price_per_gb)
+                                          report (folder_id, usage_size, month, year, price_per_gb)
                                       VALUES
-                                          ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."','".$hashedFile."', '".$rowDir['price']."')";
+                                          ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."', '".$rowDir['price']."')";
     
                         $execInsertReport = mysqli_query($conn, $insertReport);
 

@@ -105,7 +105,7 @@ if ($prevDataRow==1) {
                             </button>
                             &nbsp;
                             <button type="button" class="btn btn-success border-0 custom-shadow" data-toggle="modal"
-                                data-target="#login-modal">
+                                data-target="#upload-modal">
                                 <i class="fas fa-plus"></i> Upload Report
                             </button>
                         </div>
@@ -234,12 +234,13 @@ if ($prevDataRow==1) {
                                 <tbody>
                                     <?php
 
-                                    $listDirectory = "SELECT *
+                                    $listDirectory = "SELECT *, SUM(usage_size) AS usize
                                                         FROM report 
                                                         INNER JOIN folder ON report.folder_id = folder.folder_id 
                                                         INNER JOIN department ON department.dept_id = folder.dept_id 
                                                         INNER JOIN customer ON customer.cust_id = department.cust_id 
-                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND customer.cust_id = '".$custParam."' ";
+                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND customer.cust_id = '".$custParam."' 
+                                                        GROUP BY report.folder_id ORDER BY report.id";
                                     $execListDirectory = mysqli_query($conn, $listDirectory);
 
                                     $total_usage = 0;
@@ -257,8 +258,8 @@ if ($prevDataRow==1) {
                                             echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = $row['usage_size']/1073741824;
-                                            $total_usage = $total_usage + $row['usage_size'];
+                                            $total_size = $row['usize']/1073741824;
+                                            $total_usage = $total_usage + $row['usize'];
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
                                             echo "</tr>";
@@ -331,8 +332,8 @@ if ($prevDataRow==1) {
                                             echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = $row['usage_size']/1073741824;
-                                            $total_usage = $total_usage + $row['usage_size'];
+                                            $total_size = $row['usize']/1073741824;
+                                            $total_usage = $total_usage + $row['usize'];
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
                                             echo "</tr>";
@@ -550,8 +551,8 @@ include "src/footer.php";
 <script src="src/dist/js/print/jspdf.min.js"></script>
 <script src="src/dist/js/print/toPDF.js"></script>
 
-<!-- SignIn modal content -->
-<div id="login-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- Upload Report modal content -->
+<div id="upload-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
@@ -561,9 +562,15 @@ include "src/footer.php";
                 <form action="module/csv.php" id="csvForm" method="POST" enctype="multipart/form-data"
                     class="pl-3 pr-3">
                     <div class="form-group">
+                        <label for="">Select report date:</label>
+                        <?php
+                            echo "<input type='month' class='form-control' value='".$dateParam."' id='reportDate' name='reportDate'>";
+                        ?>
+                    </div>                    
+                    <div class="form-group">
                         <fieldset class="form-group">
                             <input type="text" id="paramCustID" hidden readonly name="paramCustID">
-                            <input type="file" class="form-control-file" id="exampleInputFile" accept=".csv"
+                            <input type="file" class="form-control-file" id="file_name" accept=".csv"
                                 name="file_name">
                         </fieldset>
                     </div>

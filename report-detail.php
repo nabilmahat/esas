@@ -550,6 +550,7 @@ include "src/footer.php";
 <script src="src/dist/js/report.js"></script>
 <script src="src/dist/js/print/jspdf.min.js"></script>
 <script src="src/dist/js/print/toPDF.js"></script>
+<script src="src/dist/js/print/printReport.js"></script>
 
 <!-- Upload Report modal content -->
 <div id="upload-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">

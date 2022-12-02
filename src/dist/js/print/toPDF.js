@@ -120,7 +120,7 @@ async function printData() {
          let e = newWin.document.write(departmentalContent.outerHTML) 
          // e += newWin.document.write('<div class="pagebreak"> </div>');
          e += newWin.document.write("<br><br><br><br>");
-         e += newWin.document.write('************************END REPORT**********************************');
+         e += newWin.document.write('<div class="text-center">*******************************END REPORT*******************************</div>');
 
          // end div tag
          e += newWin.document.write("</div>");
@@ -151,7 +151,6 @@ async function printData() {
 
 }
 
-$('#printReport').on('click', function () {
-   printData();
-
-})
+// $('#printReport').on('click', function () {
+//    printData();
+// })

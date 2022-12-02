@@ -150,7 +150,8 @@ if(isset($_GET["cust_id"])) {
                     <!-- ============================================================== -->
                     <ul class="navbar-nav float-left mr-auto ml-3 pl-1 position-relative">
                         <?php
-                            if(isset($rowCust["cust_name"])) {
+
+                            if (isset($rowCust["cust_name"]) && !str_contains($_SERVER['REQUEST_URI'],'report-detail')) {
                                 echo "<h2 class='cust-name' id='custName'>".$rowCust["cust_name"]." <i class='fas fa-pencil-alt pencil-edit cust-edit'";
                                 echo "data-toggle='modal'";
                                 echo 'data-target="#edit-customer-modal" onclick="setCustDetail(';
@@ -171,6 +172,8 @@ if(isset($_GET["cust_id"])) {
                                 echo "'";
                                 echo ')"';
                                 echo " data-placement='top' title='Edit Customer Detail'></i></h2>";
+                            } else if (isset($rowCust["cust_name"]) && str_contains($_SERVER['REQUEST_URI'],'report-detail')) {
+                                echo "<h2 class='cust-name' id='custName'>".$rowCust["cust_name"]."</h2>";
                             }
                         ?>
                     </ul>

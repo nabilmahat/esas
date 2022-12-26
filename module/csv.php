@@ -29,12 +29,12 @@ if($fileName) {
                 // convert data to object from column 1 and 4, push data to array
                 while (($data = fgetcsv($handle, 0, ",")) !== FALSE) {
                     // get report date
-                    if($data[7]!="") {
-                        $detailDate = $data[7];
+                    if($data[8]!="") {
+                        $detailDate = $data[8];
                     }
                     array_push($detail,  (object)[
                         'dir' => $data[0],
-                        'size' => $data[5]
+                        'size' => $data[6]
                     ]);
                 }
             fclose($handle); // close file stream

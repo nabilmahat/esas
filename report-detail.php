@@ -125,7 +125,7 @@ if ($prevDataRow==1) {
         <!-- *************************************************************** -->
         <!-- Start Stat Cards -->
         <!-- *************************************************************** -->
-        <div class="card-group">
+        <!-- <div class="card-group">
             <div class="card border-right">
                 <div class="card-body">
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
@@ -211,7 +211,7 @@ if ($prevDataRow==1) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- *************************************************************** -->
         <!-- End Stat Cards -->
         <!-- *************************************************************** -->
@@ -258,8 +258,8 @@ if ($prevDataRow==1) {
                                             echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = $row['usize']/1073741824;
-                                            $total_usage = $total_usage + $row['usize'];
+                                            $total_size = round(round(($row['usize']/1073741824),PHP_ROUND_HALF_UP));
+                                            $total_usage = $total_usage + $total_size;
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
                                             echo "</tr>";
@@ -267,7 +267,7 @@ if ($prevDataRow==1) {
                                             $listNum++;
                                         }
                                         
-                                        $totalGB = $total_usage/1073741824;
+                                        $totalGB = $total_usage;
 
                                         echo "<tr>";
                                         echo "<td colspan='3' class='text-center'><b>Total</b></td>";
@@ -332,8 +332,8 @@ if ($prevDataRow==1) {
                                             echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = $row['usize']/1073741824;
-                                            $total_usage = $total_usage + $row['usize'];
+                                            $total_size = round(round(($row['usize']/1073741824),PHP_ROUND_HALF_UP));
+                                            $total_usage = $total_usage + $total_size;
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
                                             echo "</tr>";
@@ -341,7 +341,7 @@ if ($prevDataRow==1) {
                                             $listNumWF++;
                                         }
                                         
-                                        $totalGB = $total_usage/1073741824;
+                                        $totalGB = $total_usage;
 
                                         echo "<tr>";
                                         echo "<td colspan='2' class='text-center'><b>Total</b></td>";
@@ -392,43 +392,46 @@ if ($prevDataRow==1) {
                                 <tbody>
                                     <?php
 
-                                    $queryDepartmentList = "SELECT SUM(report.usage_size) as usage_size, department.dept_name, customer.cust_name
-                                                            FROM report
-                                                            INNER JOIN folder
-                                                            ON report.folder_id = folder.folder_id
-                                                            INNER JOIN department
-                                                            ON folder.dept_id = department.dept_id
-                                                            INNER JOIN customer
-                                                            ON department.cust_id = customer.cust_id
-                                                            WHERE report.month = '".$monthParam."' AND report.year = '".$yearParam."' AND customer.cust_id = '".$custParam."'
-                                                            GROUP BY department.dept_name";
+                                    $deptArray = array();
+                                    $uniqueDept = '';
 
-                                    $execQueryDepartmentList = mysqli_query($conn, $queryDepartmentList);
+                                    if($count!=0){
 
-                                    $totalUsageDept = 0;
+                                        foreach ($execListDirectory as $row) {
+                                            array_push($deptArray, $row["dept_name"]);
+                                        }
+                                        $uniqueDept = array_unique($deptArray);
 
-                                    $countDeptList = mysqli_num_rows($execQueryDepartmentList);
+                                    }
 
                                     $listNumDept = 1;
 
-                                    if($countDeptList!=0){
+                                    if($count!=0){
 
-                                        foreach ($execQueryDepartmentList as $row) {
+                                        foreach ($uniqueDept as $deptRow) {
+                                            $total_size = 0;
+                                            $total_usage = 0;
+                                            foreach ($execListDirectory as $row) {             
+                                                if ($row["dept_name"] == $deptRow) {                                  
+                                                    $total_size = round(round(($row['usize']/1073741824),PHP_ROUND_HALF_UP));
+                                                    $total_usage = $total_usage + $total_size;
+                                                }
+                                            }
                                             echo "<tr>";
                                             echo "<td>".$listNumDept."</td>";
-                                            echo "<td>".$row['dept_name']."</td>";
+                                            echo "<td>".$deptRow."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = $row['usage_size']/1073741824;
-                                            $totalUsageDept = $totalUsageDept + $row['usage_size'];
+                                            // $total_size = round(round(($row['usage_size']/1073741824),PHP_ROUND_HALF_UP));
+                                            // $totalUsageDept = $totalUsageDept + $total_size;
                                                                                 
-                                            echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                            echo "<td  class='text-right'>".number_format($total_usage)."</td>";
                                             echo "</tr>";
 
                                             $listNumDept++;
                                         }
                                         
-                                        $totalGB = $totalUsageDept/1073741824;
+                                        $totalGB = $total_usage;
 
                                         echo "<tr>";
                                         echo "<td colspan='2' class='text-center'><b>Total</b></td>";

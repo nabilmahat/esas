@@ -1,9 +1,14 @@
 $(async function () {
 
     // chart data
-    const d = new Date();
-    let year = d.getFullYear();
-    let month = d.getMonth()+1; // +1 because in db april == 04
+    const currDate = new Date();
+    var d = currDate.toLocaleDateString("en-GB", { // you can use undefined as first argument
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+    let year = d.year;
+    let month = d.month; // +1 because in db april == 04
 
     let arrayData = [];
     let colorArray = [

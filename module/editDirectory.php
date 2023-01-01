@@ -23,7 +23,7 @@ if ($numRows == 1) {
 
         $queryUpdateDir = "UPDATE folder
                                     SET folder_directory = '".$dir."', folder_name = '".$dirName."'
-                                    WHERE folder_id = '".$dirID."' ";
+                                    WHERE folder_id = '".$dirID."' AND dept_id = '".$deptID."' ";
         $execQueryUpdateDir = mysqli_query($conn, $queryUpdateDir);
 
         if ($execQueryUpdateDir) {
@@ -53,7 +53,7 @@ if ($numRows == 1) {
 
             $queryUpdateDir = "UPDATE folder
                                     SET folder_directory = '".$dir."', folder_name = '".$dirName."'
-                                    WHERE folder_id = '".$dirID."' ";
+                                    WHERE folder_id = '".$dirID."' AND dept_id = '".$deptID."'";
             $execQueryUpdateDir = mysqli_query($conn, $queryUpdateDir);
 
             if ($execQueryUpdateDir) {

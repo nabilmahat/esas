@@ -20,6 +20,8 @@ $(document).ready(function () {
 
         if ((cust_id.length !== 0) && (dir.length !== 0) && (dir_name.length !== 0)) {
 
+            console.log(deptIdDir);
+
             $.post("module/editDirectory.php",
                 {
                     dir_id: foldID,

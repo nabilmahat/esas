@@ -56,6 +56,8 @@ if ($prevDataRow==1) {
     $extractDataPrevious = mysqli_fetch_array($execCardDataPrevious,MYSQLI_ASSOC);
 }
 
+$mxfServerSize = 0;
+
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -68,15 +70,16 @@ if ($prevDataRow==1) {
         <div class="row">
             <div class="col-7 align-self-center">
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">ESAS Report</h4>
-                <div class="d-flex align-items-center">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="storage-user.php" class="text-muted">Customer Management</a>
-                            </li>
-                            <li class="breadcrumb-item text-muted active" aria-current="page">ESAS Report</li>
-                        </ol>
-                    </nav>
-                </div>
+                    <div class="d-flex align-items-center">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb m-0 p-0">
+                                <li class="breadcrumb-item"><a href="storage-user.php" class="text-muted">Customer
+                                        Management</a>
+                                </li>
+                                <li class="breadcrumb-item text-muted active" aria-current="page">ESAS Report</li>
+                            </ol>
+                        </nav>
+                    </div>
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
@@ -125,15 +128,15 @@ if ($prevDataRow==1) {
         <!-- *************************************************************** -->
         <!-- Start Stat Cards -->
         <!-- *************************************************************** -->
-        <!-- <div class="card-group">
+        <div class="card-group">
             <div class="card border-right">
                 <div class="card-body">
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
                         <div>
                             <div class="d-inline-flex align-items-center">
-                                <h2 class="text-dark mb-1 font-weight-medium">
+                                <h2 class="text-dark mb-1 font-weight-medium" id="monthly-usage">
                                     <?php
-                                        echo number_format($extractData["monthly_usage"]/1073741824);
+                                        // echo number_format($extractData["monthly_usage"]/1073741824);
                                     ?>
                                 </h2>
                             </div>
@@ -145,7 +148,7 @@ if ($prevDataRow==1) {
                     </div>
                 </div>
             </div>
-            <div class="card border-right">
+            <!-- <div class="card border-right">
                 <div class="card-body">
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
                         <div>
@@ -191,14 +194,14 @@ if ($prevDataRow==1) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex d-lg-flex d-md-block align-items-center">
                         <div>
                             <div class="d-inline-flex align-items-center">
                                 <h2 class="text-dark mb-1 font-weight-medium">
-                                <?php
+                                    <?php
                                     echo $extractData["price_per_gb"];
                                 ?>
                                 </h2>
@@ -211,15 +214,15 @@ if ($prevDataRow==1) {
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <!-- *************************************************************** -->
         <!-- End Stat Cards -->
         <!-- *************************************************************** -->
         <div class="row ">
             <!-- Start Isilon Report -->
-            <div class="col-12">
+            <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body row">
+                    <div class="card-body">
                         <h4 class="card-title">1. Isilon Report</h4>
                         <div class="table-responsive">
                             <table id="isilon" class="table table-bordered no-wrap">
@@ -252,6 +255,11 @@ if ($prevDataRow==1) {
                                     if($count!=0){
 
                                         foreach ($execListDirectory as $row) {
+
+                                            if($row['folder_directory'] == '/ifs/MXFSERVER') {
+                                                $mxfServerSize = $row['usage_size'];
+                                            }
+
                                             echo "<tr>";
                                             echo "<td>".$listNum."</td>";
                                             echo "<td>".$row['cust_name']. " ".$row['dept_name']."</td>";
@@ -271,7 +279,7 @@ if ($prevDataRow==1) {
 
                                         echo "<tr>";
                                         echo "<td colspan='3' class='text-center'><b>Total</b></td>";
-                                        echo "<td class='text-right'>";
+                                        echo "<td class='text-right' id='storage-usage'>";
                                         echo "<b>";
                                         echo number_format($totalGB);                                            
                                         echo "</b>";
@@ -378,7 +386,7 @@ if ($prevDataRow==1) {
                             <canvas id="bar-chart" height="150"> </canvas>
                         </div>
                         <!-- End Chart -->
-                        <br><br>      
+                        <br><br>
                         <!-- Start Department Table -->
                         <div class="table-responsive">
                             <table id="departmental" class="table table-bordered no-wrap">
@@ -405,6 +413,7 @@ if ($prevDataRow==1) {
                                     }
 
                                     $listNumDept = 1;
+                                    $totalDeptUsage = 0;
 
                                     if($count!=0){
 
@@ -417,6 +426,7 @@ if ($prevDataRow==1) {
                                                     $total_usage = $total_usage + $total_size;
                                                 }
                                             }
+                                            $totalDeptUsage = $totalDeptUsage + $total_usage;
                                             echo "<tr>";
                                             echo "<td>".$listNumDept."</td>";
                                             echo "<td>".$deptRow."</td>";
@@ -431,7 +441,7 @@ if ($prevDataRow==1) {
                                             $listNumDept++;
                                         }
                                         
-                                        $totalGB = $total_usage;
+                                        $totalGB = $totalDeptUsage;
 
                                         echo "<tr>";
                                         echo "<td colspan='2' class='text-center'><b>Total</b></td>";
@@ -459,14 +469,28 @@ if ($prevDataRow==1) {
                 </div>
             </div>
             <!-- End Departmental Summary -->
-            <!-- Start Breakdown Summary -->            
-            <!-- <div class="col-12">
+            <?php if ($mxfServerSize!=0) { ?>
+            <div class="col-12 align-self-center">
+                <div class="customize-input float-right">
+                    <form class="mt-4">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success border-0 custom-shadow" data-toggle="modal"
+                                data-target="#upload-modal-breakdown">
+                                <i class="fas fa-plus"></i> Upload Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <?php } ?>
+            <!-- Start Breakdown Summary -->
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">2.3 Production Business Unit Breakdown Summary</h4>
+                        <h4 class="card-title">2.3 ESAS Prodcution Business Unit Breakdown</h4>
                         <div class="table-responsive">
-                            <table id="breakdown" class="table table-striped table-bordered no-wrap">
-                                <thead>
+                            <table id="business_unit" class="table table-bordered no-wrap">
+                                <thead class="thead-light">
                                     <tr>
                                         <th>No</th>
                                         <th>Business Unit</th>
@@ -474,56 +498,79 @@ if ($prevDataRow==1) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>0-ES Migration</td>
-                                        <td class="text-right">16710</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>0-Music Library CSD</td>
-                                        <td class="text-right">2916</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>1-Primeworks Distribution</td>
-                                        <td class="text-right">433</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>1-PWS Advertiser Content</td>
-                                        <td class="text-right">21837</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>0-ES Migration</td>
-                                        <td class="text-right">16710</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>0-Music Library CSD</td>
-                                        <td class="text-right">2916</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>1-Primeworks Distribution</td>
-                                        <td class="text-right">433</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>1-PWS Advertiser Content</td>
-                                        <td class="text-right">21837</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-center"><b>Total</b></td>
-                                        <td class="text-right"><b>376,974</b></td>
-                                    </tr>
+                                    <?php
+
+                                    $totalSizeListBreakdown = "SELECT *, SUM(usage_size) AS totalSize
+                                                        FROM breakdown 
+                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND cust_id = '".$custParam."' ";
+                                    $exectotalSizeListBreakdown = mysqli_query($conn, $totalSizeListBreakdown);
+                                    $dataBreakdown = mysqli_fetch_array($exectotalSizeListBreakdown);
+
+                                    $listBreakdown = "SELECT *, SUM(usage_size) AS usize
+                                                        FROM breakdown 
+                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND cust_id = '".$custParam."' 
+                                                        GROUP BY unit ORDER BY id";
+                                    $exectListBreakdown = mysqli_query($conn, $listBreakdown);
+
+                                    $total_unit = 0;
+
+                                    $countUnit = mysqli_num_rows($exectListBreakdown);
+
+                                    if($countUnit!=0){
+
+                                        $finalListBreakdown = $dataBreakdown['totalSize'];
+                                        $finalMxfServer = round(round(($mxfServerSize/1073741824),PHP_ROUND_HALF_UP));
+                                        $excessFileSize = $finalMxfServer - $finalListBreakdown;
+    
+                                        $percentUsage = number_format((1-($excessFileSize/$finalMxfServer)), 6, '.', ' ');
+                                        // echo $percentUsage;
+                                        // echo '<br>';
+                                        // echo 16710/$percentUsage;
+    
+                                        $unitNum = 1;
+
+                                        foreach ($exectListBreakdown as $row) {
+                                            echo "<tr>";
+                                            echo "<td>".$unitNum."</td>";
+                                            echo "<td>".$row['unit']."</td>";
+
+                                            //    calculate Bytes to GBs [size / 1073741824]
+                                            $total_size = round(($row['usage_size']/$percentUsage),0,PHP_ROUND_HALF_ODD);
+                                            $total_unit = $total_unit + $total_size;
+                                                                                
+                                            echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                            echo "</tr>";
+
+                                            $unitNum++;
+                                        }
+                                        
+                                        $totalGB = $total_unit;
+
+                                        echo "<tr>";
+                                        echo "<td colspan='2' class='text-center'><b>Total</b></td>";
+                                        echo "<td class='text-right'>";
+                                        echo "<b>";
+                                        echo number_format($totalGB);                                            
+                                        echo "</b>";
+                                        echo "</td>";
+                                        echo "</tr>";
+
+                                    } else {
+
+                                        echo "<tr>";
+                                        echo "<td colspan='34' class='text-center'><b>No Data</b></td>";
+                                        echo "</tr>";
+
+                                    }
+
+                                    ?>
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <!-- End Breakdown Summary -->
         </div>
         <!-- ============================================================== -->
@@ -570,12 +617,11 @@ include "src/footer.php";
                         <?php
                             echo "<input type='month' class='form-control' value='".$dateParam."' id='reportDate' name='reportDate'>";
                         ?>
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <fieldset class="form-group">
                             <input type="text" id="paramCustID" hidden readonly name="paramCustID">
-                            <input type="file" class="form-control-file" id="file_name" accept=".csv"
-                                name="file_name">
+                            <input type="file" class="form-control-file" id="file_name" accept=".csv" name="file_name">
                         </fieldset>
                     </div>
                     <div class="form-group text-center">
@@ -586,5 +632,48 @@ include "src/footer.php";
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<!-- Upload Breakdown Report modal content -->
+<div id="upload-modal-breakdown" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    <h4 class="card-title">Upload report file</h4>
+                </div>
+                <form action="module/csv2.php" id="csvForm" method="POST" enctype="multipart/form-data"
+                    class="pl-3 pr-3">
+                    <div class="form-group">
+                        <label for="">Select report date:</label>
+                        <?php
+                            echo "<input type='month' class='form-control' value='".$dateParam."' id='reportDate' name='reportDate' readonly>";
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <fieldset class="form-group">
+                            <input type="text" id="paramCustID" hidden name="paramCustID"
+                                value="<?php echo $custParam; ?>">
+                            <input type="file" class="form-control-file" id="file_name" accept=".csv" name="file_name">
+                        </fieldset>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+// window.addEventListener('load', function() {
+//     $('#monthly-usage').html($("#storage-usage").text());
+// })
+
+$('#storage-usage').change(function() {
+  // your code
+  $('#monthly-usage').html($("#storage-usage").text());
+}).change();
+</script>
 
 </html>

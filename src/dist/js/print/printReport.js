@@ -66,6 +66,7 @@ function PrintImage() {
     var workfolderContent = document.getElementById("workfolder");
     var departmentalChart = document.getElementById("bar-chart");
     var departmentalContent = document.getElementById("departmental");
+    var businessUnit = document.getElementById("business_unit");
 
     // print report
     var Pagelink = "about:blank";
@@ -90,11 +91,16 @@ function PrintImage() {
     pwa.document.write("<br><br><br><br>");
     pwa.document.write(ImagetoPrint());
     pwa.document.write('<div class="pagebreak"> </div>');
+    pwa.document.write("<br><br>");
     pwa.document.write('<b>1. Isilon Report</b> <br>') + pwa.document.write('<br>' + isilonContent.outerHTML) + pwa.document.write('<div class="pagebreak"> </div>');
+    pwa.document.write("<br><br>");
     pwa.document.write('<b>2.1 Workfolder Summary</b> <br>') + pwa.document.write("<br><img src='" + workfolderChart.toDataURL('image/png') + "' class='chart chart-image'><br><br><br>");
     pwa.document.write(workfolderContent.outerHTML) + pwa.document.write('<div class="pagebreak"> </div>');
+    pwa.document.write("<br><br>");
     pwa.document.write('<b>2.2 Departmental Summary</b> <br>') + pwa.document.write("<br><img src='" + departmentalChart.toDataURL('image/png') + "' class='chart chart-image'><br><br><br>");
-    pwa.document.write(departmentalContent.outerHTML)
+    pwa.document.write(departmentalContent.outerHTML) + pwa.document.write('<div class="pagebreak"> </div>');
+    pwa.document.write("<br><br>");
+    pwa.document.write('<b>2.3 ESAS Production Business Unit Breakdown</b> <br>') + pwa.document.write('<br>' + businessUnit.outerHTML);
     // e += pwa.document.write('<div class="pagebreak"> </div>');
     pwa.document.write("<br><br><br><br>");
     pwa.document.write('<div class="text-center">*******************************END REPORT*******************************</div>');

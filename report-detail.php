@@ -256,7 +256,7 @@ $mxfServerSize = 0;
 
                                         foreach ($execListDirectory as $row) {
 
-                                            if($row['folder_directory'] == '/ifs/MXFSERVER') {
+                                            if(($row['folder_directory'] == '/ifs/MXFSERVER') || ($row['folder_directory'] == '/ifs/data/MXFSERVER')) {
                                                 $mxfServerSize = $row['usage_size'];
                                             }
 
@@ -522,7 +522,7 @@ $mxfServerSize = 0;
                                         $finalMxfServer = round(round(($mxfServerSize/1073741824),PHP_ROUND_HALF_UP));
                                         $excessFileSize = $finalMxfServer - $finalListBreakdown;
     
-                                        $percentUsage = number_format((1-($excessFileSize/$finalMxfServer)), 6, '.', ' ');
+                                        $percentUsage = number_format((1-($excessFileSize/$finalMxfServer)), 8, '.', ' ');
                                         // echo $percentUsage;
                                         // echo '<br>';
                                         // echo 16710/$percentUsage;

@@ -102,7 +102,7 @@ function PrintImage() {
     pwa.document.write("<br><br>");
     pwa.document.write('<b>2.3 ESAS Production Business Unit Breakdown</b> <br>') + pwa.document.write('<br>' + businessUnit.outerHTML);
     // e += pwa.document.write('<div class="pagebreak"> </div>');
-    pwa.document.write("<br><br><br><br>");
+    pwa.document.write("<br><br><br>");
     pwa.document.write('<div class="text-center">*******************************END REPORT*******************************</div>');
 
     // end div tag

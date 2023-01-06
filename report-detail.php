@@ -256,18 +256,18 @@ $mxfServerSize = 0;
 
                                         foreach ($execListDirectory as $row) {
 
-                                            if(($row['folder_directory'] == '/ifs/MXFSERVER') || ($row['folder_directory'] == '/ifs/data/MXFSERVER')) {
-                                                $mxfServerSize = $row['usage_size'];
-                                            }
-
                                             echo "<tr>";
                                             echo "<td>".$listNum."</td>";
                                             echo "<td>".$row['cust_name']. " ".$row['dept_name']."</td>";
                                             echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = round(round(($row['usize']/1073741824),PHP_ROUND_HALF_UP));
+                                            $total_size = ceil(($row['usize']/1073741824));
                                             $total_usage = $total_usage + $total_size;
+
+                                            if(($row['folder_directory'] == '/ifs/MXFSERVER') || ($row['folder_directory'] == '/ifs/data/MXFSERVER')) {
+                                                $mxfServerSize = $total_size;
+                                            }
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
                                             echo "</tr>";
@@ -340,7 +340,7 @@ $mxfServerSize = 0;
                                             echo "<td>".$row['dept_name']." - ".$row['folder_name']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = round(round(($row['usize']/1073741824),PHP_ROUND_HALF_UP));
+                                            $total_size = ceil(($row['usize']/1073741824));
                                             $total_usage = $total_usage + $total_size;
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
@@ -422,7 +422,7 @@ $mxfServerSize = 0;
                                             $total_usage = 0;
                                             foreach ($execListDirectory as $row) {             
                                                 if ($row["dept_name"] == $deptRow) {                                  
-                                                    $total_size = round(round(($row['usize']/1073741824),PHP_ROUND_HALF_UP));
+                                                    $total_size = ceil(($row['usize']/1073741824));
                                                     $total_usage = $total_usage + $total_size;
                                                 }
                                             }
@@ -516,10 +516,10 @@ $mxfServerSize = 0;
 
                                     $countUnit = mysqli_num_rows($exectListBreakdown);
 
-                                    if($countUnit!=0){
+                                    if($countUnit!=0 && $mxfServerSize !=0){
 
                                         $finalListBreakdown = $dataBreakdown['totalSize'];
-                                        $finalMxfServer = round(round(($mxfServerSize/1073741824),PHP_ROUND_HALF_UP));
+                                        $finalMxfServer = $mxfServerSize;
                                         $excessFileSize = $finalMxfServer - $finalListBreakdown;
     
                                         $percentUsage = number_format((1-($excessFileSize/$finalMxfServer)), 8, '.', ' ');
@@ -535,7 +535,7 @@ $mxfServerSize = 0;
                                             echo "<td>".$row['unit']."</td>";
 
                                             //    calculate Bytes to GBs [size / 1073741824]
-                                            $total_size = round(($row['usage_size']/$percentUsage),0,PHP_ROUND_HALF_ODD);
+                                            $total_size = ($row['usage_size']/$percentUsage);
                                             $total_unit = $total_unit + $total_size;
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";

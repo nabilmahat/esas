@@ -1,5 +1,5 @@
 <?php 
-include "src/header.php"
+include "src/header.php";
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->

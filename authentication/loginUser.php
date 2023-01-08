@@ -9,7 +9,7 @@ $dateString = date("YmdHis");
 $id = mysqli_escape_string($conn,$_POST['username']);
 $password = mysqli_escape_string($conn,$_POST['password']);
 
-$queryUser = "SELECT * FROM user WHERE username = '".$id."' and password = '".$password."' ";
+$queryUser = "SELECT * FROM user WHERE username = '".$id."'; ";
 
 $result = mysqli_query($conn,$queryUser);
 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -18,32 +18,19 @@ $count = mysqli_num_rows($result);
 
 if($count==1){
 
+	if (password_verify($password, $row["password"])) {
+
     $username = $row['username'];
     $user_role = $row['user_role'];
+	$user_email = $row['email'];
 
 	// set username session
 	$_SESSION['username'] = $username;
-
-  	if($user_role=='user'){
-    	
-        // set user_role session
-    	$_SESSION['user_role'] = $user_role;
-    	echo "success";
-    }
-	// else if($user_type=='Counselor'){       
-	    
-	//     $_SESSION['user_type'] = $user_type;
-	//     echo "<script> alert('Successfully Login');";
-	// 	echo "location.href = '../counselor/view-appointment-list.php';";
-	// 	echo "</script>";
-	// }
-	// else if($user_type=='Admin'){       
-	    
-	//     $_SESSION['user_type'] = $user_type;
-	//     echo "<script> alert('Successfully Login');";
-	// 	echo "location.href = '../admin/view-patient-list.php';";
-	// 	echo "</script>";
-	// }
+	$_SESSION['user_role'] = $user_role;
+	$_SESSION['email'] = $user_email;
+	
+	echo "success";
+	}
 }
 else
 {

@@ -13,13 +13,19 @@ else if(isset($_SESSION['username']))
 {    
     if(isset($_SESSION['user_role']))
     {
-        if($_SESSION['user_role'] != "user")
-        {
-            echo '<script language="javascript">';
-            echo 'location.href="login.php"';
-            echo '</script>';
-            exit();
-        }
+        // if($_SESSION['user_role'] != "user")
+        // {
+        //     echo '<script language="javascript">';
+        //     echo 'location.href="login.php"';
+        //     echo '</script>';
+        //     exit();
+        // } else if($_SESSION['user_role'] != "admin")
+        // {
+        //     echo '<script language="javascript">';
+        //     echo 'location.href="login.php"';
+        //     echo '</script>';
+        //     exit();
+        // }
     }
     else if(!isset($_SESSION['user_role']))
     {        
@@ -194,7 +200,7 @@ if(isset($_GET["cust_id"])) {
                                         class="svg-icon"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
-                                <a class="dropdown-item" href="javascript:void(0)"><i data-feather="user"
+                                <a class="dropdown-item" href="profile.php?email=<?php echo $_SESSION["email"]; ?>"><i data-feather="user"
                                         class="svg-icon mr-2 ml-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>
@@ -240,11 +246,19 @@ if(isset($_GET["cust_id"])) {
                                 </span></a>
                         </li>                        
 
-                        <li class="sidebar-item"> <a class="sidebar-link" href="system.php"
+                        <!-- <li class="sidebar-item"> <a class="sidebar-link" href="system.php"
                                 aria-expanded="false"><i class="icon-settings"></i><span
                                     class="hide-menu">System Management
                                 </span></a>
+                        </li>                         -->
+
+                        <?php if($_SESSION["user_role"] == "admin") { ?>
+                        <li class="sidebar-item"> <a class="sidebar-link" href="user.php"
+                                aria-expanded="false"><i class="icon-user"></i><span
+                                    class="hide-menu">User Management
+                                </span></a>
                         </li>
+                        <?php } ?>
 
                         <li class="list-divider"></li>
 

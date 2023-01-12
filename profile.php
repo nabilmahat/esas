@@ -122,7 +122,7 @@ if (mysqli_num_rows($execUserQuery)==0) {
                             </div>
                             <div class="form-group text-center col-md-12">
                                 <button class="btn btn-rounded btn-success" type="button" id="userUpdate">Update</button>
-                                <a href="user.php" class="btn btn-rounded btn-danger">Cancel</a>
+                                <a href="index.php" class="btn btn-rounded btn-danger">Cancel</a>
                             </div>
                         </form>
                     </div>
@@ -152,6 +152,7 @@ if (mysqli_num_rows($execUserQuery)==0) {
 include "src/footer.php";
 ?>
 <script src="src/dist/js/ajaxForm/profileUpdate.js"></script>
+<script src="src/dist/js/ajaxForm/updatePassword.js"></script>
 </body>
 
 <!-- Change Pass modal content -->
@@ -166,22 +167,37 @@ include "src/footer.php";
                         <label for="currentPassword">Password</label>
                         <input class="form-control" type="password" required=""
                             id="current-password" name="currentPassword" placeholder="Enter your current password">
+                        <div class="invalid-feedback" id="password-error-null" style="display: none">
+                            Password is required
+                        </div>
+                        <div class="invalid-feedback" id="password-error-wrong" style="display: none">
+                            Wrong password
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="password1">New Password</label>
                         <input class="form-control" type="password" required=""
                         id="new-password" name="newPassword" placeholder="Enter your new password">
+                        <div class="invalid-feedback" id="new-password-error-null" style="display: none">
+                            Password is required
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="password1">Confirm Password</label>
                         <input class="form-control" type="password" required=""
                         id="confirm-password" name="confirmPassword" placeholder="Confirm your new password">
+                        <div class="invalid-feedback" id="confirm-password-error-null" style="display: none">
+                            Confirm password is required
+                        </div>
+                        <div class="invalid-feedback" id="confirm-password-error-match" style="display: none">
+                            Password and confirm password do not matched
+                        </div>
                     </div>
 
                     <div class="form-group text-center">
-                        <button class="btn btn-rounded btn-primary" type="submit">Update Password</button>
+                        <button class="btn btn-rounded btn-primary" type="button" id="passwordUpdate">Update Password</button>
                         <button class="btn btn-rounded btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     </div>
 

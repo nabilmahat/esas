@@ -601,6 +601,7 @@ include "src/footer.php";
 <script src="src/dist/js/print/jspdf.min.js"></script>
 <script src="src/dist/js/print/toPDF.js"></script>
 <script src="src/dist/js/print/printReport.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <!-- Upload Report modal content -->
 <div id="upload-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -674,6 +675,9 @@ $('#storage-usage').change(function() {
   // your code
   $('#monthly-usage').html($("#storage-usage").text());
 }).change();
+
 </script>
+
+<script src="src/dist/js/excelWriter.js"></script>
 
 </html>

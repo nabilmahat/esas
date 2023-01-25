@@ -34,7 +34,11 @@ if($fileName) {
                     }
                     array_push($detail,  (object)[
                         'dir' => $data[0],
-                        'size' => $data[6]
+                        'size' => $data[6],
+                        'dir_cnt' => $data[1],
+                        'file_cnt' => $data[2],
+                        'ads_cnt' => $data[3],
+                        'other_cnt' => $data[4]
                     ]);
                 }
             fclose($handle); // close file stream
@@ -83,9 +87,10 @@ if($fileName) {
                     } else { // report row not existed
 
                         $insertReport = "INSERT INTO 
-                                          report (folder_id, usage_size, month, year, file_hash, price_per_gb)
+                                          report (folder_id, usage_size, month, year, file_hash, price_per_gb, file_name, dir_count, file_count, ads_count, other_count)
                                       VALUES
-                                          ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."','".$hashedFile."', '".$rowDir['price']."')";
+                                          ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."','".$hashedFile."', '".$rowDir['price']."',
+                                          '".basename($_FILES["file_name"]["name"], '.csv')."','".$value->dir_cnt."','".$value->file_cnt."','".$value->ads_cnt."','".$value->other_cnt."')";
     
                         $execInsertReport = mysqli_query($conn, $insertReport);
 

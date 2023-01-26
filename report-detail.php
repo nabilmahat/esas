@@ -103,9 +103,9 @@ $mxfServerSize = 0;
                 <div class="customize-input float-right">
                     <form class="mt-4">
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary border-0 custom-shadow" id="printReport">
+                            <!-- <button type="button" class="btn btn-primary border-0 custom-shadow" id="printReport">
                                 <i class="fas fa-print"></i> Print Report
-                            </button>
+                            </button> -->
                             &nbsp;
                             <button type="button" class="btn btn-success border-0 custom-shadow" data-toggle="modal"
                                 data-target="#upload-modal">
@@ -113,6 +113,11 @@ $mxfServerSize = 0;
                             </button>
                         </div>
                     </form>
+                            <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius" name="" id="">
+                                <option value="">Print Report</option>
+                                <option value="">Print Amended 1</option>
+                                <option value="">Print Amended 2</option>
+                            </select>
                 </div>
             </div>
         </div>

@@ -30,6 +30,9 @@ if($count==1){
 	$_SESSION['email'] = $user_email;
 	
 	echo "success";
+	} else
+	{
+		echo "failed";
 	}
 }
 else

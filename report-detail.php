@@ -58,6 +58,9 @@ if ($prevDataRow==1) {
 
 $mxfServerSize = 0;
 
+$queryFileName = "SELECT distinct file_name FROM report WHERE month = '".$monthParam."' AND year = '".$yearParam."'; ";
+$execQueryFileName = mysqli_query($conn, $queryFileName);
+
 ?>
 <!-- ============================================================== -->
 <!-- Page wrapper  -->
@@ -98,9 +101,9 @@ $mxfServerSize = 0;
     <!-- ============================================================== -->
     <!-- Start Button Report -->
     <div class="page-breadcrumb custom-bc">
-        <div class="row">
-            <div class="col-12 align-self-center">
-                <div class="customize-input float-right">
+        <div class="row justify-content-end">
+            <div class="col-4">
+                <div class="customize-input text-right">
                     <form class="mt-4">
                         <div class="form-group">
                             <!-- <button type="button" class="btn btn-primary border-0 custom-shadow" id="printReport">
@@ -112,12 +115,25 @@ $mxfServerSize = 0;
                                 <i class="fas fa-plus"></i> Upload Report
                             </button>
                         </div>
-                    </form>
-                            <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius" name="" id="">
-                                <option value="">Print Report</option>
-                                <option value="">Print Amended 1</option>
-                                <option value="">Print Amended 2</option>
+                        <div class="input-group">
+                            <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius" id="reportName">                                
+                                <option value="1">Report</option>
+                                <?php 
+                                    $repNum = 2;
+                                    foreach ($execQueryFileName as $f) {
+                                ?>
+                                    <option value="<?php echo $repNum; ?>"><?php echo $f["file_name"]; ?></option>
+                                <?php
+                                        $repNum++;
+                                    } 
+                                ?>
                             </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" id="print">Print</button>
+                            </div>
+                        </div>
+                    </form>
+                            
                 </div>
             </div>
         </div>

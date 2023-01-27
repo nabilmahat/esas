@@ -117,7 +117,7 @@ $execQueryFileName = mysqli_query($conn, $queryFileName);
                         </div>
                         <div class="input-group">
                             <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius" id="reportName">                                
-                                <option value="1">Report</option>
+                                <option value="1">PDF Report</option>
                                 <?php 
                                     $repNum = 2;
                                     foreach ($execQueryFileName as $f) {

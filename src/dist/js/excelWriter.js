@@ -8,7 +8,7 @@ $('#print').on('click', function () {
     var reportNum = $('#reportName').find(":selected").val();
     var reportName = $('#reportName').find(":selected").text();
 
-    if (reportName === 'Report') {
+    if (reportName === 'PDF Report') {
         PrintImage();
     } else {
 

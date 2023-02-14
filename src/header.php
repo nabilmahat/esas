@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 include "connection/connection.php";
 
 if(!isset($_SESSION['username']))

@@ -7,6 +7,7 @@ $dirID = mysqli_escape_string($conn,$_POST['dir_id']);
 $dir = mysqli_escape_string($conn,$_POST['dir']);
 $oldDir = mysqli_escape_string($conn,$_POST['old_dir']);
 $dirName = mysqli_escape_string($conn,$_POST['dir_name']);
+$dirShortName = substr($dir, strrpos($dir, '/') + 1);
 $custID = mysqli_escape_string($conn,$_POST['cust_id']);
 $deptID = mysqli_escape_string($conn,$_POST['dept_id']);
 
@@ -22,7 +23,7 @@ if ($numRows == 1) {
     if ($dir == $oldDir) {
 
         $queryUpdateDir = "UPDATE folder
-                                    SET folder_directory = '".$dir."', folder_name = '".$dirName."'
+                                    SET folder_directory = '".$dir."', folder_name = '".$dirName."', folder_short_name = '".$dirShortName."'
                                     WHERE folder_id = '".$dirID."' AND dept_id = '".$deptID."' ";
         $execQueryUpdateDir = mysqli_query($conn, $queryUpdateDir);
 
@@ -52,7 +53,7 @@ if ($numRows == 1) {
         } else {
 
             $queryUpdateDir = "UPDATE folder
-                                    SET folder_directory = '".$dir."', folder_name = '".$dirName."'
+                                    SET folder_directory = '".$dir."', folder_name = '".$dirName."', folder_short_name = '".$dirShortName."'
                                     WHERE folder_id = '".$dirID."' AND dept_id = '".$deptID."'";
             $execQueryUpdateDir = mysqli_query($conn, $queryUpdateDir);
 

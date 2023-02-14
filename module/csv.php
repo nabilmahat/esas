@@ -1,6 +1,10 @@
 <?php
 include "../connection/connection.php";
 
+// error ouput if any la
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
 $reportDate = $_POST["reportDate"];
@@ -14,7 +18,8 @@ $detail = [];
 $detailDate = '';
 
 // __DIR__ = current project file (csv.php)
-$uploadDir = __DIR__."/../reports/";
+$realPath = realpath(__DIR__ . '/..');
+$uploadDir = $realPath."/reports/";
 $fileName = $uploadDir . basename($_FILES["file_name"]["name"]);
 $uploadOk = 1;
 

@@ -12,26 +12,27 @@ $password = mysqli_escape_string($conn,$_POST['password']);
 $queryUser = "SELECT * FROM user WHERE username = '".$id."'; ";
 
 $result = mysqli_query($conn,$queryUser);
-$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 
 $count = mysqli_num_rows($result);
 
 if($count==1){
 
-	if (password_verify($password, $row["password"])) {
-
-    $username = $row['username'];
-    $user_role = $row['user_role'];
-	$user_email = $row['email'];
-
-	// set username session
-	$_SESSION['username'] = $username;
-	$_SESSION['user_role'] = $user_role;
-	$_SESSION['email'] = $user_email;
+	$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 	
-	echo "success";
-	} else
-	{
+	// if (password_verify($password, $row["password"])) {
+	if ($password == $row["password"]) {
+
+		$username = $row['username'];
+		$user_role = $row['user_role'];
+		$user_email = $row['email'];
+
+		// set username session
+		$_SESSION['username'] = $username;
+		$_SESSION['user_role'] = $user_role;
+		$_SESSION['email'] = $user_email;
+		
+		echo "success";
+	} else {
 		echo "failed";
 	}
 }

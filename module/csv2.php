@@ -13,7 +13,8 @@ $object = new stdClass();
 $detail = [];
 
 // __DIR__ = current project file (csv.php)
-$uploadDir = __DIR__."/../reports/breakdown/";
+$realPath = realpath(__DIR__ . '/..');
+$uploadDir = $realPath."/reports/breakdown/";
 $fileName = $uploadDir . basename($_FILES["file_name"]["name"]);
 $uploadOk = 1;
 

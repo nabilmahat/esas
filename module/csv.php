@@ -77,8 +77,8 @@ if($fileName) {
                     $dirName = substr($data[0], strrpos($data[0], '/') + 1);
                     array_push($detail,  (object)[
                         'dir' => $dirName,
+                        'dir_name' => $data[0],
                         'size' => $data[$colPhysCount],
-
                         'dir_cnt' => $data[$colDirCount],
                         'file_cnt' => $data[$colfileCount],
                         'ads_cnt' => $data[$colAdsCount],
@@ -134,7 +134,7 @@ if($fileName) {
                                             report (folder_id, usage_size, month, year, file_hash, price_per_gb, file_name, folder_dir, dir_count, file_count, ads_count, other_count)
                                         VALUES
                                             ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."','".$hashedFile."', '".$rowDir['price']."',
-                                            '".basename($_FILES["file_name"]["name"], '.csv')."', '".$value->dir."', '".$value->dir_cnt."','".$value->file_cnt."','".$value->ads_cnt."','".$value->other_cnt."')";
+                                            '".basename($_FILES["file_name"]["name"], '.csv')."', '".$value->dir_name."', '".$value->dir_cnt."','".$value->file_cnt."','".$value->ads_cnt."','".$value->other_cnt."')";
         
                             $execInsertReport = mysqli_query($conn, $insertReport);
 

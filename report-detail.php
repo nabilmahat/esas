@@ -58,7 +58,7 @@ if ($prevDataRow==1) {
 
 $mxfServerSize = 0;
 
-$queryFileName = "SELECT distinct file_name FROM report WHERE month = '".$monthParam."' AND year = '".$yearParam."'; ";
+$queryFileName = "SELECT distinct file_name FROM report WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND cust_id = '".$custParam."'; ";
 $execQueryFileName = mysqli_query($conn, $queryFileName);
 
 ?>
@@ -286,7 +286,7 @@ $execQueryFileName = mysqli_query($conn, $queryFileName);
                                             $total_size = ceil(($row['usize']/1073741824));
                                             $total_usage = $total_usage + $total_size;
 
-                                            if(($row['folder_directory'] == '/ifs/MXFSERVER') || ($row['folder_directory'] == '/ifs/data/MXFSERVER')) {
+                                            if($row['folder_short_name'] == 'MXFSERVER') {
                                                 $mxfServerSize = $total_size;
                                             }
                                                                                 

@@ -130,11 +130,29 @@ if($fileName) {
 
                         } else { // report row not existed
 
+                            $dirCnt = 0;
+                            $fileCnt = 0;
+                            $adsCnt = 0;
+                            $otherCnt = 0;
+
+                            if (is_nan($value->dir_cnt)) {
+                                $dirCnt = $value->dir_cnt;
+                            }
+                            if (is_nan($value->file_cnt)) {
+                                $fileCnt = $value->file_cnt;
+                            }
+                            if (is_nan($value->ads_cnt)) {
+                                $adsCnt = $value->ads_cnt;
+                            }
+                            if (is_nan($value->other_cnt)) {
+                                $otherCnt = $value->other_cnt;
+                            }
+
                             $insertReport = "INSERT INTO 
                                             report (folder_id, usage_size, month, year, file_hash, price_per_gb, file_name, folder_dir, dir_count, file_count, ads_count, other_count, cust_id)
                                         VALUES
                                             ('".$rowDir['folder_id']."','".$value->size."','".$monthString."','".$YearString."','".$hashedFile."', '".$rowDir['price']."',
-                                            '".basename($_FILES["file_name"]["name"], '.csv')."', '".$value->dir_name."', '".$value->dir_cnt."','".$value->file_cnt."','".$value->ads_cnt."','".$value->other_cnt."', '".$custID."')";
+                                            '".basename($_FILES["file_name"]["name"], '.csv')."', '".$value->dir_name."', '".$dirCnt."','".$fileCnt."','".$adsCnt."','".$otherCnt."', '".$custID."')";
         
                             $execInsertReport = mysqli_query($conn, $insertReport);
 

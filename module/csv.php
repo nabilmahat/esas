@@ -135,16 +135,16 @@ if($fileName) {
                             $adsCnt = 0;
                             $otherCnt = 0;
 
-                            if (is_nan($value->dir_cnt)) {
+                            if (is_numeric($value->dir_cnt)) {
                                 $dirCnt = $value->dir_cnt;
                             }
-                            if (is_nan($value->file_cnt)) {
+                            if (is_numeric($value->file_cnt)) {
                                 $fileCnt = $value->file_cnt;
                             }
-                            if (is_nan($value->ads_cnt)) {
+                            if (is_numeric($value->ads_cnt)) {
                                 $adsCnt = $value->ads_cnt;
                             }
-                            if (is_nan($value->other_cnt)) {
+                            if (is_numeric($value->other_cnt)) {
                                 $otherCnt = $value->other_cnt;
                             }
 

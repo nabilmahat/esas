@@ -35,7 +35,7 @@ $('#print').on('click', function () {
                     count++;
                 }
 
-                data.push([], ["", "", "", "", "", "", "", "", { t: "n", f: "SUM(I" + 2 + ":I" + result.length + ")" }, { t: "n", f: "SUM(J" + 2 + ":J" + result.length + ")" }, { t: "n", f: "SUM(K" + 2 + ":K" + result.length + ")" }, { t: "n", f: "SUM(L" + 2 + ":L" + result.length + ")" }], [], ["1 Byte = 8 Bit", "", "", "", "", ""],
+                data.push([], ["", "", "", "", "", "", "", "", { t: "n", f: "SUM(I" + 2 + ":I" + (result.length+1) + ")" }, { t: "n", f: "SUM(J" + 2 + ":J" + (result.length+1) + ")" }, { t: "n", f: "SUM(K" + 2 + ":K" + (result.length+1) + ")" }, { t: "n", f: "SUM(L" + 2 + ":L" + (result.length+1) + ")" }], [], ["1 Byte = 8 Bit", "", "", "", "", ""],
                     ["1 Kilobyte = 1,024 Bytes", "", "", "", "1024", ""],
                     ["1 Megabyte = 1,048,576 Bytes", "", "", "", "1024", ""],
                     ["1 Gigabyte = 1,073,741,824 Bytes", "", "", "", "1024", "1073741824"],

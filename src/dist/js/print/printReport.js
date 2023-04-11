@@ -42,6 +42,9 @@ function PrintImage() {
         // '}' +
         '@media print {' +
         '.pagebreak { page-break-before: always; }' +
+        '#isilon th:nth-child(5), #isilon td:nth-child(5) { ' + // ignore when print
+        '   display: none; ' +
+        '   }' +
         '}' +
         '.chart-img {' +
         'border: 1px solid black;' +

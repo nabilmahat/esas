@@ -253,12 +253,13 @@ $execQueryFileName = mysqli_query($conn, $queryFileName);
                                         <th>Department</th>
                                         <th>Workflow Folder</th>
                                         <th>Size in GB</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
 
-                                    $listDirectory = "SELECT *, SUM(usage_size) AS usize
+                                    $listDirectory = "SELECT *, SUM(usage_size) AS usize, report.id as uid
                                                         FROM report 
                                                         INNER JOIN folder ON report.folder_id = folder.folder_id 
                                                         INNER JOIN department ON department.dept_id = folder.dept_id 
@@ -291,6 +292,7 @@ $execQueryFileName = mysqli_query($conn, $queryFileName);
                                             }
                                                                                 
                                             echo "<td  class='text-right'>".number_format($total_size)."</td>";
+                                            echo "<td><a href='module/deleteReport.php?report_id=".$row['uid']."&&report_date=".$yearParam.'-'.$monthParam."&&cust_id=".$custParam."' class='btn waves-effect waves-light btn-danger'>Remove</a></td>";
                                             echo "</tr>";
 
                                             $listNum++;

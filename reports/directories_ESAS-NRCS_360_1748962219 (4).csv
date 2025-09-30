@@ -1,0 +1,5 @@
+path[directory:/ifs/],dir_cnt (count),file_cnt (count),ads_cnt,other_cnt (count),log_size_sum (bytes),phys_size_sum (bytes),log_size_sum_overflow,report_date: 1737016978
+/ifs/NRCS,1,72529,0,0,5.76372E+14,6.60025E+14,0,
+/ifs/NRCS_ES,2,19,0,0,36116823903,41378660352,0,
+/ifs/data,3,984,0,0,1974427,48824320,0,
+/ifs/home,6,10,0,0,5923,688128,0,

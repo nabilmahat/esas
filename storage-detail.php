@@ -119,10 +119,10 @@ if(isset($custParam)) {
                     echo "</thead>";
                     echo "<tbody>";
 
-                    $listDirectory = "SELECT * FROM folder 
+                    $listDirectory = "SELECT * FROM folder
                                         INNER JOIN department ON folder.dept_id = department.dept_id
                                         INNER JOIN customer ON department.cust_id = customer.cust_id
-                                        WHERE customer.cust_id='$custParam' AND department.dept_id = '".$row['dept_id']."'";
+                                        WHERE customer.cust_id='$custParam' AND department.dept_id = '".$row['dept_id']."' AND folder.deleted_at IS NULL";
                     $execListDirectory = mysqli_query($conn, $listDirectory);
 
                     $dirNum = 1;
@@ -154,7 +154,12 @@ if(isset($custParam)) {
                         echo "<i class='fas fa-pencil-alt'></i> Edit";
                         echo "</button>";
                         echo "&nbsp;&nbsp;";
-                        echo "<button disabled='' type='button' class='btn btn-sm btn-danger btn-rounded'>";
+                        echo "<button type='button' class='btn btn-sm btn-danger btn-rounded' data-toggle='modal'";
+                        echo 'data-target="#delete-directory-modal" onclick="setDeleteFolderID(';
+                        echo "'";
+                        echo $rowDir["folder_id"];
+                        echo "'";
+                        echo ')" >';
                         echo "<i class='fas fa-trash'></i> Delete";
                         echo "</button>";
                         echo "</td>";
@@ -350,6 +355,25 @@ include "src/footer.php";
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Delete Directory modal content -->
+<div id="delete-directory-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    <h4 class="card-title">Delete Directory</h4>
+                    <p class="text-muted">Are you sure you want to delete this directory?</p>
+                    <p class="text-danger"><small><strong>Note:</strong> This will hide the directory from the list, but all historical reports will be preserved.</small></p>
+                </div>
+                <div class="form-group text-center">
+                    <button class="btn btn-rounded btn-secondary" type="button" data-dismiss="modal" id="cancelDeleteDir">Cancel</button>
+                    <button class="btn btn-rounded btn-danger" type="button" id="deleteDirectory">Delete Directory</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <!-- Edit Customer Detail modal content -->
 <div id="edit-customer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -411,6 +435,7 @@ include "src/footer.php";
 <script src="src/dist/js/ajaxForm/editDepartment.js"></script>
 <script src="src/dist/js/ajaxForm/addDirectory.js"></script>
 <script src="src/dist/js/ajaxForm/editDirectory.js"></script>
+<script src="src/dist/js/ajaxForm/deleteDirectory.js"></script>
 <script src="src/dist/js/ajaxForm/editCustomer.js"></script>
 
 </html>

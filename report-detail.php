@@ -264,11 +264,11 @@ $execQueryFileName = mysqli_query($conn, $queryFileName);
                                     <?php
 
                                     $listDirectory = "SELECT *, SUM(usage_size) AS usize, report.id as uid
-                                                        FROM report 
-                                                        INNER JOIN folder ON report.folder_id = folder.folder_id 
-                                                        INNER JOIN department ON department.dept_id = folder.dept_id 
-                                                        INNER JOIN customer ON customer.cust_id = department.cust_id 
-                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND customer.cust_id = '".$custParam."' 
+                                                        FROM report
+                                                        INNER JOIN folder ON report.folder_id = folder.folder_id
+                                                        INNER JOIN department ON department.dept_id = folder.dept_id
+                                                        INNER JOIN customer ON customer.cust_id = department.cust_id
+                                                        WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND customer.cust_id = '".$custParam."'
                                                         GROUP BY report.folder_id ORDER BY report.id";
                                     $execListDirectory = mysqli_query($conn, $listDirectory);
 

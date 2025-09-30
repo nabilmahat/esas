@@ -11,9 +11,9 @@ $dirShortName = substr($dir, strrpos($dir, '/') + 1);
 $custID = mysqli_escape_string($conn,$_POST['cust_id']);
 $deptID = mysqli_escape_string($conn,$_POST['dept_id']);
 
-$findDeptFold = "SELECT * FROM folder 
+$findDeptFold = "SELECT * FROM folder
                 INNER JOIN department ON folder.dept_id = department.dept_id
-                WHERE folder.dept_id = '".$deptID."' AND folder.folder_id = '".$dirID."'; ";
+                WHERE folder.dept_id = '".$deptID."' AND folder.folder_id = '".$dirID."' AND folder.deleted_at IS NULL";
 $execFindDeptFold = mysqli_query($conn, $findDeptFold);
 
 $numRows = mysqli_num_rows($execFindDeptFold);
@@ -41,7 +41,7 @@ if ($numRows == 1) {
 
     } else {
 
-        $checkDirName = "SELECT * FROM folder WHERE folder_directory = '".$dir."' AND dept_id = '".$deptID."' ";
+        $checkDirName = "SELECT * FROM folder WHERE folder_directory = '".$dir."' AND dept_id = '".$deptID."' AND deleted_at IS NULL";
         $execCheckDirname = mysqli_query($conn, $checkDirName);
         $countDirName = mysqli_num_rows($execCheckDirname);
 

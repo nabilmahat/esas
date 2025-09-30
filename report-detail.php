@@ -58,7 +58,11 @@ if ($prevDataRow==1) {
 
 $mxfServerSize = 0;
 
-$queryFileName = "SELECT distinct file_name FROM report WHERE month = '".$monthParam."' AND year = '".$yearParam."' AND cust_id = '".$custParam."'; ";
+$queryFileName = "SELECT DISTINCT report.file_name
+                  FROM report
+                  INNER JOIN folder ON report.folder_id = folder.folder_id
+                  INNER JOIN department ON folder.dept_id = department.dept_id
+                  WHERE report.month = '".$monthParam."' AND report.year = '".$yearParam."' AND department.cust_id = '".$custParam."'";
 $execQueryFileName = mysqli_query($conn, $queryFileName);
 
 ?>

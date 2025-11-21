@@ -638,7 +638,7 @@ include "src/footer.php";
                 <div class="text-center mt-2 mb-4">
                     <h4 class="card-title">Upload report file</h4>
                 </div>
-                <form action="module/csv.php" id="csvForm" method="POST" enctype="multipart/form-data"
+                <form action="module/csv_da.php" id="csvForm" method="POST" enctype="multipart/form-data"
                     class="pl-3 pr-3">
                     <div class="form-group">
                         <label for="">Select report date:</label>
